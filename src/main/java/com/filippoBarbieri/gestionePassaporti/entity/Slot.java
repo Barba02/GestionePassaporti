@@ -35,10 +35,10 @@ public class Slot {
     private Date data;
     private Time ora;
     // TODO: tenere così o come tabelle a parte
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Stato stato;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Tipo tipo;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Sede sede;
 }
