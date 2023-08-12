@@ -1,18 +1,19 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
-import java.util.NoSuchElementException;
-import org.springframework.stereotype.Service;
-import org.springframework.dao.DuplicateKeyException;
-import com.filippoBarbieri.gestionePassaporti.entity.Slot;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
+import com.filippoBarbieri.gestionePassaporti.entity.IdPrenotazione;
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.filippoBarbieri.gestionePassaporti.entity.Prenotazione;
-import com.filippoBarbieri.gestionePassaporti.entity.IdPrenotazione;
 import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.CittadinoRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.PrenotazioneRepository;
+
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
