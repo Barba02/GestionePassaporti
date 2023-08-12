@@ -14,7 +14,11 @@ public class Anagrafica {
     protected String cf;
     protected String nome;
     protected String cognome;
-    protected String nazione;
+    protected String nazionalita;
     protected Date data_nascita;
     protected String luogo_nascita;
+
+    public String getCf() {
+        return cf;
+    }
 }

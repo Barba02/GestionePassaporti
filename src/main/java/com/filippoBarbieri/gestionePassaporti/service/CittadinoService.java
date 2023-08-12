@@ -1,56 +1,43 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
-import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
-import com.filippoBarbieri.gestionePassaporti.entity.IdPrenotazione;
-import com.filippoBarbieri.gestionePassaporti.entity.Slot;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import com.filippoBarbieri.gestionePassaporti.entity.Prenotazione;
-import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
-import com.filippoBarbieri.gestionePassaporti.repository.CittadinoRepository;
-import com.filippoBarbieri.gestionePassaporti.repository.PrenotazioneRepository;
-
 import java.util.NoSuchElementException;
+import org.springframework.stereotype.Service;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
+import org.springframework.transaction.annotation.Transactional;
+import com.filippoBarbieri.gestionePassaporti.repository.CittadinoRepository;
+import com.filippoBarbieri.gestionePassaporti.repository.AnagraficaRepository;
 
 @Service
 @Transactional
-public class PrenotazioneService {
-    @Autowired
-    private SlotRepository slotRepo;
+public class CittadinoService {
     @Autowired
     private CittadinoRepository cittadinoRepo;
     @Autowired
-    private PrenotazioneRepository prenotazioneRepo;
+    private AnagraficaRepository anagraficaRepo;
 
-    public void inserisciPrenotazione(Cittadino c, Slot s) throws DuplicateKeyException {
-        IdPrenotazione pid = new IdPrenotazione(c, s);
-        if (prenotazioneRepo.existsById(pid))
-            throw new DuplicateKeyException("Prenotazione già inserita");
-        prenotazioneRepo.save(new Prenotazione(pid));
+    public void inserisciCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException {
+        if (!anagraficaRepo.existsById(c.getCf()))
+            throw new NoSuchElementException("Cittadino non presente nel database");
+        if (cittadinoRepo.existsById(c.getCf()))
+            throw new DuplicateKeyException("Cittadino già registrato");
+        c.setPassword(DigestUtils.sha256Hex(c.getPassword()));
+        cittadinoRepo.save(c);
     }
 
-    public void eliminaPrenotazione(Cittadino c, Slot s) throws NoSuchElementException {
-        IdPrenotazione pid = new IdPrenotazione(c, s);
-        if (!prenotazioneRepo.existsById(pid))
-            throw new NoSuchElementException("Prenotazione inesistente");
-        Prenotazione p = prenotazioneRepo.getReferenceById(pid);
-        prenotazioneRepo.delete(p);
+    public void modificaPassword(Cittadino c, String password) throws NoSuchElementException {
+        if (!cittadinoRepo.existsById(c.getCf()))
+            throw new NoSuchElementException("Cittadino non registrato");
+        c.setPassword(DigestUtils.sha256Hex(password));
+        cittadinoRepo.save(c);
     }
 
-    /* implementabile come inserisci+elimina
-    public Prenotazione cambiaSlot(Cittadino c, Slot oldSlot, Slot newSlot) throws Exception {
-        IdPrenotazione pid = new IdPrenotazione(c, oldSlot);
-        if (!prenotazioneRepo.existsById(pid))
-            throw new NoSuchElementException("Prenotazione inesistente");
-        pid = new IdPrenotazione(c, newSlot);
-        if (prenotazioneRepo.existsById(pid))
-            throw new DuplicateKeyException("Prenotazione già inserita");
-        Prenotazione p = prenotazioneRepo.getReferenceById(pid);
-        p.setId(pid);
-        prenotazioneRepo.save(p);
-        return p;
-    } */
+    public void modificaFlags(Cittadino c, Boolean[] vals) {
+        if (!cittadinoRepo.existsById(c.getCf()))
+            throw new NoSuchElementException("Cittadino non registrato");
+        /*TODO: termina*/
+    }
 }
