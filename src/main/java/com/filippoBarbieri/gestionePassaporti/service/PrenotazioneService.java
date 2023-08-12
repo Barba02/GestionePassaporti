@@ -40,13 +40,17 @@ public class PrenotazioneService {
         prenotazioneRepo.delete(p);
     }
 
+    /* implementabile come inserisci+elimina
     public Prenotazione cambiaSlot(Cittadino c, Slot oldSlot, Slot newSlot) throws Exception {
         IdPrenotazione pid = new IdPrenotazione(c, oldSlot);
         if (!prenotazioneRepo.existsById(pid))
             throw new NoSuchElementException("Prenotazione inesistente");
+        pid = new IdPrenotazione(c, newSlot);
+        if (prenotazioneRepo.existsById(pid))
+            throw new DuplicateKeyException("Prenotazione già inserita");
         Prenotazione p = prenotazioneRepo.getReferenceById(pid);
-        p.getId().setSlot(newSlot);
+        p.setId(pid);
         prenotazioneRepo.save(p);
         return p;
-    }
+    } */
 }

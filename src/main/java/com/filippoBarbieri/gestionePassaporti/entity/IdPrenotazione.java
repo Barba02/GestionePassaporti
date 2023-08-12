@@ -13,15 +13,10 @@ public class IdPrenotazione implements Serializable {
     @OneToOne
     private Slot slot;
 
-    public IdPrenotazione() {
-    }
+    public IdPrenotazione() {}
 
     public IdPrenotazione(Cittadino cittadino, Slot slot) {
         this.cittadino = cittadino;
-        this.slot = slot;
-    }
-
-    public void setSlot(Slot slot) {
         this.slot = slot;
     }
 }
