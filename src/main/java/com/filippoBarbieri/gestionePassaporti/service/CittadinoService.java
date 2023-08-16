@@ -35,7 +35,7 @@ public class CittadinoService {
         cittadinoRepo.save(c);
     }
 
-    public void modificaTs(Cittadino c, String ts) {
+    /* public void modificaTs(Cittadino c, String ts) {
         if (!cittadinoRepo.existsById(c.getCf()))
             throw new NoSuchElementException("Cittadino non registrato");
         c.setTs(ts);
@@ -49,5 +49,5 @@ public class CittadinoService {
         c.setDiplomatico(vals[1]);
         c.setFigli_minori(vals[2]);
         cittadinoRepo.save(c);
-    }
+    } */
 }
