@@ -19,7 +19,7 @@ public class CittadinoService {
     @Autowired
     private AnagraficaRepository anagraficaRepo;
 
-    public void inserisciCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException {
+    public void registraCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException {
         if (!anagraficaRepo.existsById(c.getCf()))
             throw new NoSuchElementException("Cittadino non presente nel database");
         if (cittadinoRepo.existsById(c.getCf()))
