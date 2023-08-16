@@ -1,6 +1,8 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
+import java.util.List;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
@@ -25,6 +27,16 @@ public class SlotService {
         if (!slotRepo.existsById(s.getDatetime()))
             throw new NoSuchElementException("Slot inesistente");
         slotRepo.delete(s);
+    }
+
+    public Slot getSlot(LocalDateTime dt) throws NoSuchElementException {
+        if (!slotRepo.existsById(dt))
+            throw new NoSuchElementException("Slot inesistente");
+        return slotRepo.getReferenceById(dt);
+    }
+
+    public List<Slot> getSlotBeetwen(LocalDateTime from, LocalDateTime to) {
+        return slotRepo.findAllByDatetimeBetween(from, to);
     }
 
     /* public void modificaStato(Slot s, Stato st) throws NoSuchElementException {

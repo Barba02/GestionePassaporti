@@ -35,6 +35,12 @@ public class CittadinoService {
         cittadinoRepo.save(c);
     }
 
+    public Cittadino getCittadino(String cf) throws NoSuchElementException {
+        if (!cittadinoRepo.existsById(cf))
+            throw new NoSuchElementException("Cittadino non registrato");
+        return cittadinoRepo.getReferenceById(cf);
+    }
+
     /* public void modificaTs(Cittadino c, String ts) {
         if (!cittadinoRepo.existsById(c.getCf()))
             throw new NoSuchElementException("Cittadino non registrato");

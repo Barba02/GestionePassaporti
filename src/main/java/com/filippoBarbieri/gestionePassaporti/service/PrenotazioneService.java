@@ -1,6 +1,7 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
@@ -37,6 +38,17 @@ public class PrenotazioneService {
             throw new NoSuchElementException("Prenotazione inesistente");
         Prenotazione p = prenotazioneRepo.getReferenceById(pid);
         prenotazioneRepo.delete(p);
+    }
+
+    public Prenotazione getPrenotazione(Cittadino c, Slot s) throws NoSuchElementException {
+        IdPrenotazione pid = new IdPrenotazione(c, s);
+        if (!prenotazioneRepo.existsById(pid))
+            throw new NoSuchElementException("Prenotazione inesistente");
+        return prenotazioneRepo.getReferenceById(pid);
+    }
+
+    public List<Prenotazione> getListaPrenotazioni(Cittadino c) {
+        return prenotazioneRepo.findAllByIdContaining(c);
     }
 
     /* implementabile come inserisci+elimina
