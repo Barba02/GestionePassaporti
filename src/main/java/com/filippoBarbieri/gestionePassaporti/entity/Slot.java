@@ -5,21 +5,6 @@ import java.sql.Date;
 import java.sql.Time;
 import jakarta.persistence.*;
 
-enum Stato {
-    OCCUPATO,
-    LIBERO,
-    NON_GESTITO
-}
-
-enum Tipo {
-    RILASCIO,
-    RINNOVO_SCADENZA,
-    RINNOVO_FURTO,
-    RINNOVO_SMARRIMENTO,
-    RINNOVO_DETERIORAMENTO,
-    RITIRO
-}
-
 enum Sede {
     QUESTURA_VERONA,
     QUESTURA_PADOVA,
@@ -41,4 +26,24 @@ public class Slot {
     private Tipo tipo;
     @Enumerated(EnumType.STRING)
     private Sede sede;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public Time getOra() {
+        return ora;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setStato(Stato stato) {
+        this.stato = stato;
+    }
 }
