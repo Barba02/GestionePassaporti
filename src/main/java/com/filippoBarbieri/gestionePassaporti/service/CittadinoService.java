@@ -28,11 +28,10 @@ public class CittadinoService {
         cittadinoRepo.save(c);
     }
 
-    public void modificaPassword(Cittadino c, String password) throws NoSuchElementException {
+    public void eliminaCittadino(Cittadino c) throws NoSuchElementException {
         if (!cittadinoRepo.existsById(c.getCf()))
             throw new NoSuchElementException("Cittadino non registrato");
-        c.setPassword(DigestUtils.sha256Hex(password));
-        cittadinoRepo.save(c);
+        cittadinoRepo.delete(c);
     }
 
     public Cittadino getCittadino(String cf) throws NoSuchElementException {
@@ -41,7 +40,15 @@ public class CittadinoService {
         return cittadinoRepo.getReferenceById(cf);
     }
 
-    /* public void modificaTs(Cittadino c, String ts) {
+    /*
+    public void modificaPassword(Cittadino c, String password) throws NoSuchElementException {
+        if (!cittadinoRepo.existsById(c.getCf()))
+            throw new NoSuchElementException("Cittadino non registrato");
+        c.setPassword(DigestUtils.sha256Hex(password));
+        cittadinoRepo.save(c);
+    }
+
+    public void modificaTs(Cittadino c, String ts) {
         if (!cittadinoRepo.existsById(c.getCf()))
             throw new NoSuchElementException("Cittadino non registrato");
         c.setTs(ts);
