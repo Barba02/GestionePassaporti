@@ -16,14 +16,14 @@ public class SlotService {
     private SlotRepository slotRepo;
 
     public void inserisciSlot(Slot s) throws DuplicateKeyException {
-        if (slotRepo.findByDataAndOra(s.getData(), s.getOra()).isPresent())
+        if (slotRepo.existsById(s.getDatetime()))
             throw new DuplicateKeyException("Slot già inserito");
         slotRepo.save(s);
     }
 
     public void eliminaSlot(Slot s) throws NoSuchElementException {
-        if (slotRepo.findByDataAndOra(s.getData(), s.getOra()).isEmpty())
-            throw new NoSuchElementException("Prenotazione inesistente");
+        if (!slotRepo.existsById(s.getDatetime()))
+            throw new NoSuchElementException("Slot inesistente");
         slotRepo.delete(s);
     }
 

@@ -1,9 +1,8 @@
 package com.filippoBarbieri.gestionePassaporti.entity;
 
 
-import java.sql.Date;
-import java.sql.Time;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 enum Sede {
     QUESTURA_VERONA,
@@ -15,10 +14,7 @@ enum Sede {
 @Entity
 public class Slot {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private Date data;
-    private Time ora;
+    private LocalDateTime datetime;
     // TODO: tenere così o come tabelle a parte
     @Enumerated(EnumType.STRING)
     private Stato stato;
@@ -27,16 +23,8 @@ public class Slot {
     @Enumerated(EnumType.STRING)
     private Sede sede;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public Date getData() {
-        return data;
-    }
-
-    public Time getOra() {
-        return ora;
+    public LocalDateTime getDatetime() {
+        return datetime;
     }
 
     public void setTipo(Tipo tipo) {
