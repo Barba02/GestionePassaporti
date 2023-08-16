@@ -35,9 +35,19 @@ public class CittadinoService {
         cittadinoRepo.save(c);
     }
 
+    public void modificaTs(Cittadino c, String ts) {
+        if (!cittadinoRepo.existsById(c.getCf()))
+            throw new NoSuchElementException("Cittadino non registrato");
+        c.setTs(ts);
+        cittadinoRepo.save(c);
+    }
+
     public void modificaFlags(Cittadino c, Boolean[] vals) {
         if (!cittadinoRepo.existsById(c.getCf()))
             throw new NoSuchElementException("Cittadino non registrato");
-        /*TODO: termina*/
+        c.setDi_servizio(vals[0]);
+        c.setDiplomatico(vals[1]);
+        c.setFigli_minori(vals[2]);
+        cittadinoRepo.save(c);
     }
 }
