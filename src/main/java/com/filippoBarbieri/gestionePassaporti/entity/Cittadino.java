@@ -2,13 +2,19 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Cittadino extends Anagrafica {
+    @NotNull
     private String ts;
+    @NotNull
     private String password;
+    @NotNull
     private Boolean figli_minori;
+    @NotNull
     private Boolean diplomatico;
+    @NotNull
     private Boolean di_servizio;
 
     public String getPassword() {

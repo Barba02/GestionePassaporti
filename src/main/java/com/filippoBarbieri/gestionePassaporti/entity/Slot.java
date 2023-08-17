@@ -2,6 +2,8 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 enum Sede {
@@ -16,10 +18,13 @@ public class Slot {
     @Id
     private LocalDateTime datetime;
     // TODO: tenere così o come tabelle a parte
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Stato stato;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Sede sede;
 
