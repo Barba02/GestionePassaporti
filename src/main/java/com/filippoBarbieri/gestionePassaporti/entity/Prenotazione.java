@@ -13,4 +13,12 @@ public class Prenotazione {
     public Prenotazione(IdPrenotazione id) {
         this.id = id;
     }
+
+    public IdPrenotazione getId() {
+        return id;
+    }
+
+    public void setId(IdPrenotazione id) {
+        this.id = id;
+    }
 }

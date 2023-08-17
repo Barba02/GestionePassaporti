@@ -22,4 +22,20 @@ public class IdPrenotazione implements Serializable {
         this.cittadino = cittadino;
         this.slot = slot;
     }
+
+    public Cittadino getCittadino() {
+        return cittadino;
+    }
+
+    public void setCittadino(Cittadino cittadino) {
+        this.cittadino = cittadino;
+    }
+
+    public Slot getSlot() {
+        return slot;
+    }
+
+    public void setSlot(Slot slot) {
+        this.slot = slot;
+    }
 }

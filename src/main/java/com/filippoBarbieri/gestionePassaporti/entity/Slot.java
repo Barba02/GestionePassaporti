@@ -32,11 +32,31 @@ public class Slot {
         return datetime;
     }
 
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
+    public void setDatetime(LocalDateTime datetime) {
+        this.datetime = datetime;
+    }
+
+    public Stato getStato() {
+        return stato;
     }
 
     public void setStato(Stato stato) {
         this.stato = stato;
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public Sede getSede() {
+        return sede;
+    }
+
+    public void setSede(Sede sede) {
+        this.sede = sede;
     }
 }
