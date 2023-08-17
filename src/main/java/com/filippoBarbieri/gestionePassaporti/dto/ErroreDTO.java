@@ -12,7 +12,19 @@ public class ErroreDTO {
 
     public ErroreDTO(String tipo, String messaggio) {
         this.tipo = tipo;
-        datetime = LocalDateTime.now().format(formatter);
         this.messaggio = messaggio;
+        datetime = LocalDateTime.now().format(formatter);
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getDatetime() {
+        return datetime;
+    }
+
+    public String getMessaggio() {
+        return messaggio;
     }
 }

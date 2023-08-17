@@ -1,16 +1,19 @@
 package com.filippoBarbieri.gestionePassaporti.controller;
 
 
+import java.util.NoSuchElementException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.EntityManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
 import com.filippoBarbieri.gestionePassaporti.service.CittadinoService;
 
+@RestController
 @RequestMapping("/cittadino")
 public class CittadinoController extends Controller {
     @Autowired
@@ -22,7 +25,7 @@ public class CittadinoController extends Controller {
             service.registraCittadino(c);
             return new ResponseEntity<>("Cittadino registrato", HttpStatus.CREATED);
         }
-        catch(Exception e) {
+        catch(NoSuchElementException | DuplicateKeyException e) {
             String exceptionName = e.getClass().getSimpleName();
             ErroreDTO dto = new ErroreDTO(exceptionName, e.getMessage());
             HttpStatus status = (exceptionName.equals("NoSuchElementException")) ?
@@ -37,7 +40,7 @@ public class CittadinoController extends Controller {
         try {
             return new ResponseEntity<>(service.getCittadino(cf), HttpStatus.OK);
         }
-        catch(Exception e) {
+        catch(NoSuchElementException e) {
             ErroreDTO dto = new ErroreDTO(e.getClass().getSimpleName(), e.getMessage());
             return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
         }
