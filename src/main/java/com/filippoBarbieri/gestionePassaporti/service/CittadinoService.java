@@ -1,9 +1,8 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
-import java.util.NoSuchElementException;
+import java.util.*;
 import org.springframework.stereotype.Service;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
@@ -20,18 +19,13 @@ public class CittadinoService {
     private AnagraficaRepository anagraficaRepo;
 
     public void registraCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException {
-        if (!anagraficaRepo.existsById(c.getCf()))
-            throw new NoSuchElementException("Cittadino non presente nel database");
+        System.out.println(anagraficaRepo.existsById("BRBFPP02R01E349J"));
+        /* TODO: risolvere (exists, find) */
         if (cittadinoRepo.existsById(c.getCf()))
             throw new DuplicateKeyException("Cittadino già registrato");
-        c.setPassword(DigestUtils.sha256Hex(c.getPassword()));
+        if (!anagraficaRepo.existsById(c.getCf()))
+            throw new NoSuchElementException("Cittadino non presente nel database");
         cittadinoRepo.save(c);
-    }
-
-    public void eliminaCittadino(Cittadino c) throws NoSuchElementException {
-        if (!cittadinoRepo.existsById(c.getCf()))
-            throw new NoSuchElementException("Cittadino non registrato");
-        cittadinoRepo.delete(c);
     }
 
     public Cittadino getCittadino(String cf) throws NoSuchElementException {
@@ -40,27 +34,24 @@ public class CittadinoService {
         return cittadinoRepo.getReferenceById(cf);
     }
 
-    /*
-    public void modificaPassword(Cittadino c, String password) throws NoSuchElementException {
-        if (!cittadinoRepo.existsById(c.getCf()))
+    public void modificaCittadino(String cf, Map<String, Object> newAttribs) throws NoSuchElementException, NoSuchFieldException {
+        if (!cittadinoRepo.existsById(cf))
             throw new NoSuchElementException("Cittadino non registrato");
-        c.setPassword(DigestUtils.sha256Hex(password));
-        cittadinoRepo.save(c);
+        StringBuilder notUpdated = new StringBuilder();
+        Cittadino c = cittadinoRepo.getReferenceById(cf);
+        for (Map.Entry<String, Object> e : newAttribs.entrySet()) {
+            switch (e.getKey()) {
+                case "ts" -> c.setTs((String) e.getValue());
+                case "password" -> c.setPassword((String) e.getValue());
+                case "di_servizio" -> c.setDi_servizio((Boolean) e.getValue());
+                case "diplomatico" -> c.setDiplomatico((Boolean) e.getValue());
+                case "figli_minori" -> c.setFigli_minori((Boolean) e.getValue());
+                default -> notUpdated.append(e.getKey()).append(", ");
+            }
+        }
+        /* TODO: dto restituito */
+        if (!notUpdated.isEmpty())
+            throw new NoSuchFieldException(notUpdated.substring(0, notUpdated.length()-2) +
+                    " inesistenti o non modificabili; altri dati aggiornati");
     }
-
-    public void modificaTs(Cittadino c, String ts) {
-        if (!cittadinoRepo.existsById(c.getCf()))
-            throw new NoSuchElementException("Cittadino non registrato");
-        c.setTs(ts);
-        cittadinoRepo.save(c);
-    }
-
-    public void modificaFlags(Cittadino c, Boolean[] vals) {
-        if (!cittadinoRepo.existsById(c.getCf()))
-            throw new NoSuchElementException("Cittadino non registrato");
-        c.setDi_servizio(vals[0]);
-        c.setDiplomatico(vals[1]);
-        c.setFigli_minori(vals[2]);
-        cittadinoRepo.save(c);
-    } */
 }

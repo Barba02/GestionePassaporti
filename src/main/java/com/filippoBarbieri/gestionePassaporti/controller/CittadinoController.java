@@ -1,9 +1,8 @@
 package com.filippoBarbieri.gestionePassaporti.controller;
 
 
+import java.util.Map;
 import java.util.NoSuchElementException;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.EntityManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,7 @@ import com.filippoBarbieri.gestionePassaporti.service.CittadinoService;
 public class CittadinoController extends Controller {
     @Autowired
     private CittadinoService service;
+    /*TODO: uppercase, capitalize*/
 
     @PostMapping(path = "/registra", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
     public ResponseEntity<Object> registraCittadino(@RequestBody Cittadino c) {
@@ -38,6 +38,7 @@ public class CittadinoController extends Controller {
     @GetMapping(path = "/{cf}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getCittadino(@PathVariable String cf) {
         try {
+            /*TODO: dto, exception*/
             return new ResponseEntity<>(service.getCittadino(cf), HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
@@ -47,28 +48,18 @@ public class CittadinoController extends Controller {
     }
 
     @PutMapping(path = "/{cf}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
-    public ResponseEntity<Object> modificaCittadino(@PathVariable String cf, @RequestBody Cittadino c) {
-        ResponseEntity<Object> res;
-        EntityManager em = Persistence.createEntityManagerFactory("updateCittadino").createEntityManager();
+    public ResponseEntity<Object> modificaCittadino(@PathVariable String cf, @RequestBody Map<String, Object> newAttribs) {
         try {
-            em.getTransaction().begin();
-            /*TODO: verificare non si tolgano a cascata*/
-            service.eliminaCittadino(service.getCittadino(cf));
-            registraCittadino(c);
-            em.getTransaction().commit();
-            res = new ResponseEntity<>("Modifica eseguita", HttpStatus.OK);
-        } catch (Exception e) {
-            em.getTransaction().rollback();
+            service.modificaCittadino(cf, newAttribs);
+            return new ResponseEntity<>("Dati cittadino aggiornati", HttpStatus.OK);
+        }
+        catch (NoSuchElementException | NoSuchFieldException e) {
             String exceptionName = e.getClass().getSimpleName();
             ErroreDTO dto = new ErroreDTO(exceptionName, e.getMessage());
             HttpStatus status = (exceptionName.equals("NoSuchElementException")) ?
                     HttpStatus.NOT_FOUND :
-                    HttpStatus.INTERNAL_SERVER_ERROR;
-            res = new ResponseEntity<>(dto, status);
+                    HttpStatus.NOT_MODIFIED;
+            return new ResponseEntity<>(dto, status);
         }
-        finally {
-            em.close();
-        }
-        return res;
     }
 }
