@@ -1,8 +1,8 @@
 package com.filippoBarbieri.gestionePassaporti.controller;
 
 
-import java.util.Map;
 import java.util.NoSuchElementException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class CittadinoController extends Controller {
             service.registraCittadino(c);
             return new ResponseEntity<>("Cittadino registrato", HttpStatus.CREATED);
         }
-        catch(NoSuchElementException | DuplicateKeyException e) {
+        catch (NoSuchElementException | DuplicateKeyException e) {
             String exceptionName = e.getClass().getSimpleName();
             ErroreDTO dto = new ErroreDTO(exceptionName, e.getMessage());
             HttpStatus status = (exceptionName.equals("NoSuchElementException")) ?
@@ -46,20 +46,9 @@ public class CittadinoController extends Controller {
             return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
         }
     }
-
+/*
     @PutMapping(path = "/{cf}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
-    public ResponseEntity<Object> modificaCittadino(@PathVariable String cf, @RequestBody Map<String, Object> newAttribs) {
-        try {
-            service.modificaCittadino(cf, newAttribs);
-            return new ResponseEntity<>("Dati cittadino aggiornati", HttpStatus.OK);
-        }
-        catch (NoSuchElementException | NoSuchFieldException e) {
-            String exceptionName = e.getClass().getSimpleName();
-            ErroreDTO dto = new ErroreDTO(exceptionName, e.getMessage());
-            HttpStatus status = (exceptionName.equals("NoSuchElementException")) ?
-                    HttpStatus.NOT_FOUND :
-                    HttpStatus.NOT_MODIFIED;
-            return new ResponseEntity<>(dto, status);
-        }
-    }
+     public ResponseEntity<Object> modificaCittadino(@PathVariable String cf, @RequestBody modificaCittadinoDTO newAttribs) throws IllegalAccessException, NoSuchFieldException {
+
+    } */
 }
