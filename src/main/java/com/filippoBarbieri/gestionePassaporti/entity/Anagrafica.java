@@ -3,10 +3,12 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
 
 @Entity
 public class Anagrafica {
     @Id
+    @Column(length=16)
     private String cf;
 
     public Anagrafica() {}

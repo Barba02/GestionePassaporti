@@ -2,6 +2,8 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.sql.Date;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +12,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 @Entity
 public class Cittadino {
     @Id
+    @Column(length = 16)
     private String cf;
     @NotNull
     private String nome;
@@ -22,6 +25,7 @@ public class Cittadino {
     @NotNull
     private String luogo_nascita;
     @NotNull
+    @Column(length = 20)
     private String ts;
     @NotNull
     private String password;
