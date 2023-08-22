@@ -2,10 +2,9 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.sql.Date;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -96,8 +95,20 @@ public class Cittadino {
         return password;
     }
 
+    public void hidePassword() {
+        password = "*".repeat(16);
+    }
+
+    static public String hashPassword(String password) {
+        return DigestUtils.sha256Hex(password);
+    }
+
+    public static boolean isValid(String password) {
+        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()-[{}]:;',?/*~$^+=<>]).{8,}$");
+    }
+
     public void setPassword(String password) {
-        this.password = DigestUtils.sha256Hex(password);
+        this.password = password;
     }
 
     public Boolean getFigli_minori() {
