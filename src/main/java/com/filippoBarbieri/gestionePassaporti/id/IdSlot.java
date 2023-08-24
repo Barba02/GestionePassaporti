@@ -8,9 +8,11 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
+import org.springframework.format.annotation.DateTimeFormat;
 
-@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 public class IdSlot implements Serializable {
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime datetime;
     @Enumerated(EnumType.STRING)
     private Sede sede;

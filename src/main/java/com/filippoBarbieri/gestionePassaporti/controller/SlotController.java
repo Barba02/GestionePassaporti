@@ -32,10 +32,10 @@ public class SlotController extends Controller {
         }
     }
 
-    @GetMapping(path = "/{id}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getSlot(@PathVariable IdSlot id) {
+    @GetMapping(path = "/{sede}/{datetime}", produces = {"application/json", "application/xml"})
+    public ResponseEntity<Object> getSlot(@PathVariable Sede sede, @PathVariable LocalDateTime datetime) {
         try {
-            return new ResponseEntity<>(service.getSlot(id), HttpStatus.OK);
+            return new ResponseEntity<>(service.getSlot(new IdSlot(datetime, sede)), HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
@@ -43,21 +43,22 @@ public class SlotController extends Controller {
         }
     }
 
+    /*TODO: verificare*/
     @GetMapping(path = "/{sede}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getSlot(@PathVariable Sede sede) {
         return new ResponseEntity<>(service.getSlotsAt(sede), HttpStatus.OK);
     }
 
-    /*TODO: date mancanti*/
+    /*TODO: date mancanti, verificare*/
     @GetMapping(path = "/{from}&{to}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getSlot(@PathVariable LocalDateTime from, @PathVariable LocalDateTime to) {
         return new ResponseEntity<>(service.getSlotsBeetwen(from, to), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{id}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> eliminaSlot(@PathVariable IdSlot id) {
+    @DeleteMapping(path = "/{sede}/{datetime}", produces = {"application/json", "application/xml"})
+    public ResponseEntity<Object> eliminaSlot(@PathVariable Sede sede, @PathVariable LocalDateTime datetime) {
         try {
-            service.eliminaSlot(id);
+            service.eliminaSlot(new IdSlot(datetime, sede));
             return new ResponseEntity<>("Slot eliminato", HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
@@ -66,6 +67,7 @@ public class SlotController extends Controller {
         }
     }
 
+    /*TODO: verificare*/
     @PutMapping(path = "/{id}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
     public ResponseEntity<Object> modificaSlot(@PathVariable IdSlot id, @RequestBody Slot s) {
         try {

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.filippoBarbieri.gestionePassaporti.id.IdSlot;
 import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
@@ -60,6 +61,7 @@ public class Slot {
         this.sede = sede;
     }
 
+    @JsonIgnore
     public IdSlot getId() {
         return new IdSlot(datetime, sede);
     }
