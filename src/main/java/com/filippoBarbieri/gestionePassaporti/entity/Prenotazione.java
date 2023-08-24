@@ -2,6 +2,7 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import jakarta.persistence.*;
+import com.filippoBarbieri.gestionePassaporti.id.IdPrenotazione;
 
 @Entity
 public class Prenotazione {

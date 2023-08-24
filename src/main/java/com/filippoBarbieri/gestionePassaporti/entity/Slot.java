@@ -2,31 +2,27 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
-
-enum Sede {
-    QUESTURA_VERONA,
-    QUESTURA_PADOVA,
-    QUESTURA_VENEZIA,
-    CONSOLATO_LAS_PALMAS
-}
+import jakarta.validation.constraints.NotNull;
+import com.filippoBarbieri.gestionePassaporti.id.IdSlot;
+import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
+import com.filippoBarbieri.gestionePassaporti.enums.Sede;
+import com.filippoBarbieri.gestionePassaporti.enums.Stato;
 
 @Entity
+@IdClass(IdSlot.class)
 public class Slot {
     @Id
     private LocalDateTime datetime;
-    // TODO: tenere così o come tabelle a parte
+    @Id
+    @Enumerated(EnumType.STRING)
+    private Sede sede;
     @NotNull
     @Enumerated(EnumType.STRING)
     private Stato stato;
     @NotNull
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private Sede sede;
 
     public LocalDateTime getDatetime() {
         return datetime;

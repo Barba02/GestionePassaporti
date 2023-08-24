@@ -35,7 +35,7 @@ public class SlotService {
         return slotRepo.getReferenceById(dt);
     }
 
-    public List<Slot> getSlotBeetwen(LocalDateTime from, LocalDateTime to) {
+    public List<Slot> getSlotsBeetwen(LocalDateTime from, LocalDateTime to) {
         return slotRepo.findAllByDatetimeBetween(from, to);
     }
 

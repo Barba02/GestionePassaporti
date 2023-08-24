@@ -1,4 +1,4 @@
-package com.filippoBarbieri.gestionePassaporti.entity;
+package com.filippoBarbieri.gestionePassaporti.enums;
 
 
 public enum Tipo {

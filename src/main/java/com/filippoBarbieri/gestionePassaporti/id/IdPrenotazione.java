@@ -1,11 +1,14 @@
-package com.filippoBarbieri.gestionePassaporti.entity;
+package com.filippoBarbieri.gestionePassaporti.id;
 
 
-import java.io.Serializable;
+import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
 
 @Embeddable
 public class IdPrenotazione implements Serializable {
