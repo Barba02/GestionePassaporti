@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-public class Controller {
+public abstract class Controller {
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ErroreDTO> gestioneErroreCentralizzata(Exception e) {
         ErroreDTO dto = new ErroreDTO(e.getClass().getSimpleName(), e.getMessage());
