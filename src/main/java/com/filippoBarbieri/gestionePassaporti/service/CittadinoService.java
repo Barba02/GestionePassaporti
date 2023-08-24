@@ -39,9 +39,7 @@ public class CittadinoService {
     }
 
     public ModificaCittadinoDTO modificaCittadino(String cf, Cittadino c) throws NoSuchElementException, IllegalAccessException {
-        Cittadino old = cittadinoRepo.findById(cf).orElse(null);
-        if (old == null)
-            throw new NoSuchElementException("Cittadino non registrato");
+        Cittadino old = getCittadino(cf);
         StringBuilder news = new StringBuilder();
         for (Field f : Cittadino.class.getDeclaredFields()) {
             f.setAccessible(true);
