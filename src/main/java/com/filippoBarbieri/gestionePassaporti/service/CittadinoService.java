@@ -2,13 +2,12 @@ package com.filippoBarbieri.gestionePassaporti.service;
 
 
 import java.util.*;
-import java.lang.reflect.Field;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
 import org.springframework.transaction.annotation.Transactional;
-import com.filippoBarbieri.gestionePassaporti.dto.ModificaCittadinoDTO;
 import com.filippoBarbieri.gestionePassaporti.repository.CittadinoRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.AnagraficaRepository;
 
@@ -38,29 +37,21 @@ public class CittadinoService {
         return c;
     }
 
-    public ModificaCittadinoDTO modificaCittadino(String cf, Cittadino c) throws NoSuchElementException, IllegalAccessException {
-        Cittadino old = getCittadino(cf);
-        StringBuilder news = new StringBuilder();
-        for (Field f : Cittadino.class.getDeclaredFields()) {
-            f.setAccessible(true);
-            if (f.getName().equals("ts") || f.getName().equals("figli_minori") || f.getName().equals("diplomatico") || f.getName().equals("di_servizio")) {
-                if (f.get(c) != null && !f.get(c).equals(f.get(old))) {
-                    news.append(f.getName()).append("|");
-                    f.set(old, f.get(c));
-                }
-            }
-        }
+    public ModificaDTO<Cittadino> modificaCittadino(String cf, Cittadino c) throws NoSuchElementException, IllegalAccessException {
+        ModificaDTO<Cittadino> mod = new ModificaDTO<>(getCittadino(cf));
+        mod.modifica(List.of(new String[]{"ts", "figli_minori", "diplomatico", "di_servizio"}), c);
+        Cittadino old = mod.getObj();
         String psw = c.getPassword();
         String hash = Cittadino.hashPassword(psw);
         if (psw != null && !old.getPassword().equals(hash)) {
             if (Cittadino.isValid(psw)) {
-                news.append("password|");
+                mod.setUpdated(mod.getUpdated() + "|password");
                 old.setPassword(hash);
             }
             else
-                news.append("password not valid|");
+                mod.setUpdated(mod.getUpdated() + "|password not valid");
         }
         cittadinoRepo.save(old);
-        return new ModificaCittadinoDTO(old, news.toString());
+        return mod;
     }
 }

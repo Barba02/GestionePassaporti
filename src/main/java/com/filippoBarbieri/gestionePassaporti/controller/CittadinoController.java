@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
-import com.filippoBarbieri.gestionePassaporti.dto.ModificaCittadinoDTO;
 import com.filippoBarbieri.gestionePassaporti.service.CittadinoService;
 
 @RestController
@@ -54,8 +54,8 @@ public class CittadinoController extends Controller {
     @PutMapping(path = "/{cf}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
     public ResponseEntity<Object> modificaCittadino(@PathVariable String cf, @RequestBody Cittadino c) {
         try {
-            ModificaCittadinoDTO newCitt = service.modificaCittadino(cf, c);
-            newCitt.getCittadino().hidePassword();
+            ModificaDTO<Cittadino> newCitt = service.modificaCittadino(cf, c);
+            newCitt.getObj().hidePassword();
             return new ResponseEntity<>(newCitt, HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
