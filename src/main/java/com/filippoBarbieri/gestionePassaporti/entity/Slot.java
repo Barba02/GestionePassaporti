@@ -4,15 +4,19 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.filippoBarbieri.gestionePassaporti.id.IdSlot;
 import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
 import com.filippoBarbieri.gestionePassaporti.enums.Stato;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @IdClass(IdSlot.class)
 public class Slot {
     @Id
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime datetime;
     @Id
     @Enumerated(EnumType.STRING)
@@ -54,5 +58,9 @@ public class Slot {
 
     public void setSede(Sede sede) {
         this.sede = sede;
+    }
+
+    public IdSlot getId() {
+        return new IdSlot(datetime, sede);
     }
 }

@@ -6,8 +6,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
 
+@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 public class IdSlot implements Serializable {
     private LocalDateTime datetime;
     @Enumerated(EnumType.STRING)
