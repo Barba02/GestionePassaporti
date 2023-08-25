@@ -4,16 +4,20 @@ package com.filippoBarbieri.gestionePassaporti.service;
 import java.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
 import org.springframework.transaction.annotation.Transactional;
+import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.CittadinoRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.AnagraficaRepository;
 
 @Service
 @Transactional
 public class CittadinoService {
+    @Autowired
+    private SlotRepository slotRepo;
     @Autowired
     private CittadinoRepository cittadinoRepo;
     @Autowired
@@ -53,5 +57,13 @@ public class CittadinoService {
         }
         cittadinoRepo.save(old);
         return mod;
+    }
+
+    public List<Slot> getSlots(String cf) throws NoSuchElementException {
+        if (!cittadinoRepo.existsById(cf))
+            throw new NoSuchElementException("Cittadino non registrato");
+        List<Slot> l = slotRepo.findAllByCittadino_Cf(cf);
+        l.stream().parallel().forEach(s -> s.setCittadino(null));
+        return l;
     }
 }
