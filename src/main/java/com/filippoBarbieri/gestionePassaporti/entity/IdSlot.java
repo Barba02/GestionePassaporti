@@ -1,4 +1,4 @@
-package com.filippoBarbieri.gestionePassaporti.id;
+package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.util.Objects;

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.filippoBarbieri.gestionePassaporti.id.IdSlot;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
 import com.filippoBarbieri.gestionePassaporti.enums.Stato;
@@ -28,6 +28,9 @@ public class Slot {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
+    @OneToOne
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Cittadino cittadino;
 
     public LocalDateTime getDatetime() {
         return datetime;
@@ -59,6 +62,16 @@ public class Slot {
 
     public void setSede(Sede sede) {
         this.sede = sede;
+    }
+
+    public Cittadino getCittadino() {
+        if (cittadino != null)
+            cittadino.hidePassword();
+        return cittadino;
+    }
+
+    public void setCittadino(Cittadino cittadino) {
+        this.cittadino = cittadino;
     }
 
     @JsonIgnore

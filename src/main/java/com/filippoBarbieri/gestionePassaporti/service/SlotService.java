@@ -6,19 +6,22 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
-import com.filippoBarbieri.gestionePassaporti.id.IdSlot;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
+import com.filippoBarbieri.gestionePassaporti.entity.IdSlot;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import org.springframework.transaction.annotation.Transactional;
 import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
+import com.filippoBarbieri.gestionePassaporti.repository.CittadinoRepository;
 
 @Service
 @Transactional
 public class SlotService {
     @Autowired
     private SlotRepository slotRepo;
+    @Autowired
+    private CittadinoRepository cittadinoRepo;
 
     public void inserisciSlot(Slot s) throws DuplicateKeyException {
         if (!s.getDatetime().isAfter(LocalDateTime.now()))
@@ -51,8 +54,9 @@ public class SlotService {
     }
 
     public ModificaDTO<Slot> modificaSlot(IdSlot id, Slot s) throws NoSuchElementException, IllegalAccessException {
+        s.setCittadino(cittadinoRepo.findById(s.getCittadino().getCf()).orElse(null));
         ModificaDTO<Slot> mod = new ModificaDTO<>(getSlot(id));
-        mod.modifica(List.of(new String[]{"tipo", "stato"}), s);
+        mod.modifica(List.of(new String[]{"tipo", "stato", "cittadino"}), s);
         slotRepo.save(mod.getObj());
         return mod;
     }

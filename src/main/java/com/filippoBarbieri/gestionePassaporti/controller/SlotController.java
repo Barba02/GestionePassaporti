@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.dao.DuplicateKeyException;
-import com.filippoBarbieri.gestionePassaporti.id.IdSlot;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
+import com.filippoBarbieri.gestionePassaporti.entity.IdSlot;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.service.SlotService;
 
