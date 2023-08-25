@@ -38,11 +38,12 @@ public class SlotService {
         return s;
     }
 
-    public List<Slot> getSlotsBeetwen(LocalDateTime from, LocalDateTime to) {
+    public List<Slot> getSlotsBetween(LocalDateTime from, LocalDateTime to) {
         return slotRepo.findAllByDatetimeBetween(from, to);
     }
 
-    public List<Slot> getSlotsAt(Sede sede) {
+    public List<Slot> getSlotsAt(String s) throws IllegalArgumentException {
+        Sede sede = Sede.valueOf(s);
         return slotRepo.findAllBySede(sede);
     }
 

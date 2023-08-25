@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class IdSlot implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm")
     private LocalDateTime datetime;
     @Enumerated(EnumType.STRING)
     private Sede sede;

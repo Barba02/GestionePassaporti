@@ -17,7 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Slot {
     @Id
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm")
     private LocalDateTime datetime;
     @Id
     @Enumerated(EnumType.STRING)

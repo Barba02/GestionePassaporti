@@ -43,16 +43,21 @@ public class SlotController extends Controller {
         }
     }
 
-    /*TODO: verificare*/
     @GetMapping(path = "/{sede}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getSlot(@PathVariable Sede sede) {
-        return new ResponseEntity<>(service.getSlotsAt(sede), HttpStatus.OK);
+    public ResponseEntity<Object> getSlotsAt(@PathVariable String sede) {
+        try {
+            return new ResponseEntity<>(service.getSlotsAt(sede), HttpStatus.OK);
+        }
+        catch(IllegalArgumentException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), "Sede inesistente"),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 
     /*TODO: date mancanti, verificare*/
     @GetMapping(path = "/{from}&{to}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getSlot(@PathVariable LocalDateTime from, @PathVariable LocalDateTime to) {
-        return new ResponseEntity<>(service.getSlotsBeetwen(from, to), HttpStatus.OK);
+    public ResponseEntity<Object> getSlotsBetween(@PathVariable LocalDateTime from, @PathVariable LocalDateTime to) {
+        return new ResponseEntity<>(service.getSlotsBetween(from, to), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{sede}/{datetime}", produces = {"application/json", "application/xml"})
@@ -67,11 +72,10 @@ public class SlotController extends Controller {
         }
     }
 
-    /*TODO: verificare*/
-    @PutMapping(path = "/{id}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
-    public ResponseEntity<Object> modificaSlot(@PathVariable IdSlot id, @RequestBody Slot s) {
+    @PutMapping(path = "/{sede}/{datetime}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
+    public ResponseEntity<Object> modificaSlot(@PathVariable Sede sede, @PathVariable LocalDateTime datetime, @RequestBody Slot s) {
         try {
-            return new ResponseEntity<>(service.modificaSlot(id, s), HttpStatus.OK);
+            return new ResponseEntity<>(service.modificaSlot(new IdSlot(datetime, sede), s), HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
