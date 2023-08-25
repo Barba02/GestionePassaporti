@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.id.IdSlot;
-import com.filippoBarbieri.gestionePassaporti.enums.Sede;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +29,14 @@ public class SlotController extends Controller {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
                     HttpStatus.CONFLICT);
         }
+        catch(IllegalArgumentException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(path = "/{sede}/{datetime}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getSlot(@PathVariable Sede sede, @PathVariable LocalDateTime datetime) {
+    public ResponseEntity<Object> getSlot(@PathVariable String sede, @PathVariable LocalDateTime datetime) {
         try {
             return new ResponseEntity<>(service.getSlot(new IdSlot(datetime, sede)), HttpStatus.OK);
         }
@@ -41,12 +44,18 @@ public class SlotController extends Controller {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
                     HttpStatus.NOT_FOUND);
         }
+        catch(IllegalArgumentException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), "Sede inesistente"),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(path = "/{sede}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getSlotsAt(@PathVariable String sede) {
+    public ResponseEntity<Object> getSlots(@PathVariable String sede,
+                                           @RequestParam(required = false) LocalDateTime from,
+                                           @RequestParam(required = false) LocalDateTime to) {
         try {
-            return new ResponseEntity<>(service.getSlotsAt(sede), HttpStatus.OK);
+            return new ResponseEntity<>(service.getSlots(sede, from, to), HttpStatus.OK);
         }
         catch(IllegalArgumentException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), "Sede inesistente"),
@@ -54,14 +63,8 @@ public class SlotController extends Controller {
         }
     }
 
-    /*TODO: date mancanti, verificare*/
-    @GetMapping(path = "/{from}&{to}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getSlotsBetween(@PathVariable LocalDateTime from, @PathVariable LocalDateTime to) {
-        return new ResponseEntity<>(service.getSlotsBetween(from, to), HttpStatus.OK);
-    }
-
     @DeleteMapping(path = "/{sede}/{datetime}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> eliminaSlot(@PathVariable Sede sede, @PathVariable LocalDateTime datetime) {
+    public ResponseEntity<Object> eliminaSlot(@PathVariable String sede, @PathVariable LocalDateTime datetime) {
         try {
             service.eliminaSlot(new IdSlot(datetime, sede));
             return new ResponseEntity<>("Slot eliminato", HttpStatus.OK);
@@ -70,10 +73,14 @@ public class SlotController extends Controller {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
                     HttpStatus.NOT_FOUND);
         }
+        catch(IllegalArgumentException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), "Sede inesistente"),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(path = "/{sede}/{datetime}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
-    public ResponseEntity<Object> modificaSlot(@PathVariable Sede sede, @PathVariable LocalDateTime datetime, @RequestBody Slot s) {
+    public ResponseEntity<Object> modificaSlot(@PathVariable String sede, @PathVariable LocalDateTime datetime, @RequestBody Slot s) {
         try {
             return new ResponseEntity<>(service.modificaSlot(new IdSlot(datetime, sede), s), HttpStatus.OK);
         }
@@ -83,6 +90,10 @@ public class SlotController extends Controller {
         }
         catch(IllegalAccessException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalArgumentException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), "Sede inesistente"),
                     HttpStatus.BAD_REQUEST);
         }
     }

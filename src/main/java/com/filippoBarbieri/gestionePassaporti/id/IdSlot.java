@@ -19,6 +19,11 @@ public class IdSlot implements Serializable {
 
     public IdSlot() {}
 
+    public IdSlot(LocalDateTime datetime, String sede) throws IllegalArgumentException {
+        this.datetime = datetime;
+        this.sede = Sede.valueOf(sede);
+    }
+
     public IdSlot(LocalDateTime datetime, Sede sede) {
         this.datetime = datetime;
         this.sede = sede;

@@ -21,7 +21,8 @@ public class SlotService {
     private SlotRepository slotRepo;
 
     public void inserisciSlot(Slot s) throws DuplicateKeyException {
-        /*TODO: check validità data*/
+        if (!s.getDatetime().isAfter(LocalDateTime.now()))
+            throw new IllegalArgumentException("Impossibile inserire slot nel passato");
         if (slotRepo.existsById(s.getId()))
             throw new DuplicateKeyException("Slot già inserito");
         slotRepo.save(s);
@@ -38,12 +39,14 @@ public class SlotService {
         return s;
     }
 
-    public List<Slot> getSlotsBetween(LocalDateTime from, LocalDateTime to) {
-        return slotRepo.findAllByDatetimeBetween(from, to);
-    }
-
-    public List<Slot> getSlotsAt(String s) throws IllegalArgumentException {
+    public List<Slot> getSlots(String s, LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
         Sede sede = Sede.valueOf(s);
+        if (from != null && to != null)
+            return slotRepo.findAllBySedeAndDatetimeBetween(sede, from, to);
+        if (from != null)
+            return slotRepo.findAllBySedeAndDatetimeAfter(sede, from);
+        if (to != null)
+            return slotRepo.findAllBySedeAndDatetimeBefore(sede, to);
         return slotRepo.findAllBySede(sede);
     }
 
