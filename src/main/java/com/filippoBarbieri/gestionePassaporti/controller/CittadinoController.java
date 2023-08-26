@@ -2,8 +2,6 @@ package com.filippoBarbieri.gestionePassaporti.controller;
 
 
 import java.util.NoSuchElementException;
-
-import com.filippoBarbieri.gestionePassaporti.dto.CittadinoDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +19,7 @@ public class CittadinoController extends Controller {
     private CittadinoService service;
 
     @PostMapping(path = "/registra", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
-    public ResponseEntity<Object> registraCittadino(@RequestBody CittadinoDTO c) {
+    public ResponseEntity<Object> registraCittadino(@RequestBody Cittadino c) {
         try {
             service.registraCittadino(c);
             return new ResponseEntity<>("Cittadino registrato", HttpStatus.CREATED);

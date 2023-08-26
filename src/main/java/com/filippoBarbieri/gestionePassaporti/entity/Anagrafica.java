@@ -2,8 +2,6 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.sql.Date;
-
-import com.filippoBarbieri.gestionePassaporti.dto.CittadinoDTO;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
@@ -24,17 +22,6 @@ public class Anagrafica {
     private Date data_nascita;
     @NotNull
     private String luogo_nascita;
-
-    public Anagrafica() {}
-
-    public Anagrafica(CittadinoDTO c) {
-        cf = c.getCf();
-        nome = c.getNome();
-        cognome = c.getCognome();
-        nazionalita = c.getCognome();
-        data_nascita = c.getData_nascita();
-        luogo_nascita = c.getLuogo_nascita();
-    }
 
     public String getCf() {
         return cf;

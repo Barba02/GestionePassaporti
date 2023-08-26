@@ -2,11 +2,6 @@ package com.filippoBarbieri.gestionePassaporti.service;
 
 
 import java.util.*;
-
-import com.filippoBarbieri.gestionePassaporti.dto.CittadinoDTO;
-import com.filippoBarbieri.gestionePassaporti.entity.Anagrafica;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
@@ -28,15 +23,15 @@ public class CittadinoService {
     @Autowired
     private AnagraficaRepository anagraficaRepo;
 
-    public void registraCittadino(CittadinoDTO c) throws NoSuchElementException, DuplicateKeyException, IllegalArgumentException {
-        if (!anagraficaRepo.existsById(c.getCf()))
+    public void registraCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException, IllegalArgumentException {
+        if (!anagraficaRepo.existsById(c.getAnagrafica().getCf()))
             throw new NoSuchElementException("Cittadino non presente nel database");
-        if (cittadinoRepo.existsByAnagrafica_Cf(c.getCf()))
+        if (cittadinoRepo.existsByAnagrafica_Cf(c.getAnagrafica().getCf()))
             throw new DuplicateKeyException("Cittadino già registrato");
         if (!Cittadino.isValid(c.getPassword()))
             throw new IllegalArgumentException("La password non rispetta i parametri di sicurezza");
         c.setPassword(Cittadino.hashPassword(c.getPassword()));
-        cittadinoRepo.save(new Cittadino(c));
+        cittadinoRepo.save(c);
     }
 
     public Cittadino getCittadino(String cf) throws NoSuchElementException {

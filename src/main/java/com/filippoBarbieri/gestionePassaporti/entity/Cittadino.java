@@ -1,14 +1,15 @@
 package com.filippoBarbieri.gestionePassaporti.entity;
 
 
-import com.filippoBarbieri.gestionePassaporti.dto.CittadinoDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.codec.digest.DigestUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Cittadino {
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @OneToOne
@@ -25,17 +26,6 @@ public class Cittadino {
     private Boolean diplomatico;
     @NotNull
     private Boolean di_servizio;
-
-    public Cittadino() {}
-
-    public Cittadino(CittadinoDTO c) {
-        anagrafica = new Anagrafica(c);
-        password = hashPassword(c.getPassword());
-        ts = c.getTs();
-        figli_minori = c.getFigli_minori();
-        diplomatico = c.getDiplomatico();
-        di_servizio = c.getDi_servizio();
-    }
 
     public String getPassword() {
         return password;
