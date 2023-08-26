@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public interface SlotRepository extends JpaRepository<Slot, IdSlot> {
-    List<Slot> findAllByCittadino_Cf(String cf);
+    List<Slot> findAllByCittadino_Anagrafica_Cf(String cf);
     List<Slot> findAllBySede(Sede sede);
     List<Slot> findAllBySedeAndDatetimeAfter(Sede sede, LocalDateTime from);
     List<Slot> findAllBySedeAndDatetimeBefore(Sede sede, LocalDateTime to);

@@ -16,6 +16,6 @@ class GestionePassaportiApplicationTests {
 	@Test
 	void contextLoads() {
 		String[] cfValidi = {"BRBFPP02R01E349J", "MRRCSR02C30E512F", "CNTDRD99M06A465H", "VRTNRC99T15E512P"};
-		Arrays.stream(cfValidi).parallel().map(Anagrafica::new).forEach(cf -> anagraficaRepo.save(cf));
+		// Arrays.stream(cfValidi).parallel().map(Anagrafica::new).forEach(cf -> anagraficaRepo.save(cf));
 	}
 }

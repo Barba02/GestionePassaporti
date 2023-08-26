@@ -1,40 +1,19 @@
-package com.filippoBarbieri.gestionePassaporti.entity;
-
+package com.filippoBarbieri.gestionePassaporti.dto;
 
 import java.sql.Date;
 
-import com.filippoBarbieri.gestionePassaporti.dto.CittadinoDTO;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
-
-@Entity
-public class Anagrafica {
-    @Id
-    @Column(length = 16)
+public class CittadinoDTO {
     private String cf;
-    @NotNull
     private String nome;
-    @NotNull
     private String cognome;
-    @NotNull
     private String nazionalita;
-    @NotNull
     private Date data_nascita;
-    @NotNull
     private String luogo_nascita;
-
-    public Anagrafica() {}
-
-    public Anagrafica(CittadinoDTO c) {
-        cf = c.getCf();
-        nome = c.getNome();
-        cognome = c.getCognome();
-        nazionalita = c.getCognome();
-        data_nascita = c.getData_nascita();
-        luogo_nascita = c.getLuogo_nascita();
-    }
+    private String ts;
+    private String password;
+    private Boolean figli_minori;
+    private Boolean diplomatico;
+    private Boolean di_servizio;
 
     public String getCf() {
         return cf;
@@ -82,5 +61,45 @@ public class Anagrafica {
 
     public void setLuogo_nascita(String luogo_nascita) {
         this.luogo_nascita = luogo_nascita;
+    }
+
+    public String getTs() {
+        return ts;
+    }
+
+    public void setTs(String ts) {
+        this.ts = ts;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean getFigli_minori() {
+        return figli_minori;
+    }
+
+    public void setFigli_minori(Boolean figli_minori) {
+        this.figli_minori = figli_minori;
+    }
+
+    public Boolean getDiplomatico() {
+        return diplomatico;
+    }
+
+    public void setDiplomatico(Boolean diplomatico) {
+        this.diplomatico = diplomatico;
+    }
+
+    public Boolean getDi_servizio() {
+        return di_servizio;
+    }
+
+    public void setDi_servizio(Boolean di_servizio) {
+        this.di_servizio = di_servizio;
     }
 }
