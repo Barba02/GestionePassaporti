@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.codec.digest.DigestUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 public class Cittadino {
@@ -28,7 +29,9 @@ public class Cittadino {
     @NotNull
     private Boolean di_servizio;
     @Column(length = 9)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String passaporto;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date scadenza_passaporto;
 
     public String getPassword() {

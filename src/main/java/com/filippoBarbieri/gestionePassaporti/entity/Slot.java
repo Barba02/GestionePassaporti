@@ -13,13 +13,14 @@ import com.filippoBarbieri.gestionePassaporti.enums.Stato;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@IdClass(IdSlot.class)
 public class Slot {
     @Id
+    @JsonIgnore
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd-HH-mm")
     private LocalDateTime datetime;
-    @Id
     @Enumerated(EnumType.STRING)
     private Sede sede;
     @NotNull
@@ -72,10 +73,5 @@ public class Slot {
 
     public void setCittadino(Cittadino cittadino) {
         this.cittadino = cittadino;
-    }
-
-    @JsonIgnore
-    public IdSlot getId() {
-        return new IdSlot(datetime, sede);
     }
 }
