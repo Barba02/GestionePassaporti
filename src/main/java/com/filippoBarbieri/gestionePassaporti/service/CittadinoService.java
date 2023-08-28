@@ -43,7 +43,7 @@ public class CittadinoService {
 
     public ModificaDTO<Cittadino> modificaCittadino(String cf, Cittadino c) throws NoSuchElementException, IllegalAccessException {
         ModificaDTO<Cittadino> mod = new ModificaDTO<>(getCittadino(cf));
-        mod.modifica(List.of(new String[]{"ts", "figli_minori", "diplomatico", "di_servizio"}), c);
+        mod.modifica(List.of(new String[]{"ts", "figli_minori", "diplomatico", "di_servizio", "cie", "passaporto", "scadenza_passaporto"}), c);
         Cittadino old = mod.getObj();
         String psw = c.getPassword();
         String hash = Cittadino.hashPassword(psw);

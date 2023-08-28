@@ -1,6 +1,7 @@
 package com.filippoBarbieri.gestionePassaporti.entity;
 
 
+import java.sql.Date;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -19,6 +20,9 @@ public class Cittadino {
     @Column(length = 20)
     private String ts;
     @NotNull
+    @Column(length = 9)
+    private String cie;
+    @NotNull
     private String password;
     @NotNull
     private Boolean figli_minori;
@@ -26,6 +30,9 @@ public class Cittadino {
     private Boolean diplomatico;
     @NotNull
     private Boolean di_servizio;
+    @Column(length = 9)
+    private String passaporto;
+    private Date scadenza_passaporto;
 
     public String getPassword() {
         return password;
@@ -93,5 +100,29 @@ public class Cittadino {
 
     public void setDi_servizio(Boolean di_servizio) {
         this.di_servizio = di_servizio;
+    }
+
+    public String getCie() {
+        return cie;
+    }
+
+    public void setCie(String cie) {
+        this.cie = cie;
+    }
+
+    public String getPassaporto() {
+        return passaporto;
+    }
+
+    public void setPassaporto(String passaporto) {
+        this.passaporto = passaporto;
+    }
+
+    public Date getScadenza_passaporto() {
+        return scadenza_passaporto;
+    }
+
+    public void setScadenza_passaporto(Date scadenza_passaporto) {
+        this.scadenza_passaporto = scadenza_passaporto;
     }
 }
