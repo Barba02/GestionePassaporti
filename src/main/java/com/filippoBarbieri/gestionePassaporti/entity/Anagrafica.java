@@ -2,10 +2,14 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.sql.Date;
+import java.io.IOException;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
+import com.filippoBarbieri.gestionePassaporti.cfGeneration.CodiceFiscale;
+import com.filippoBarbieri.gestionePassaporti.cfGeneration.FormatException;
+import com.filippoBarbieri.gestionePassaporti.cfGeneration.CityNotFoundException;
 
 @Entity
 public class Anagrafica {
@@ -22,6 +26,29 @@ public class Anagrafica {
     private Date data_nascita;
     @NotNull
     private String luogo_nascita;
+    @NotNull
+    @Column(length = 2)
+    private String provincia_nascita;
+    @NotNull
+    private Boolean nato_maschio;
+
+    public Anagrafica() {}
+
+    public Anagrafica(String nome, String cognome, Boolean nato_maschio, String nazionalita, Date data_nascita, String luogo_nascita, String provincia_nascita) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.nazionalita = nazionalita;
+        this.data_nascita = data_nascita;
+        this.luogo_nascita = luogo_nascita;
+        this.nato_maschio = nato_maschio;
+        this.provincia_nascita = provincia_nascita;
+        try {
+            cf = new CodiceFiscale(nome, cognome, nato_maschio, data_nascita, luogo_nascita, provincia_nascita).toString();
+        }
+        catch (IOException | FormatException | CityNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public String getCf() {
         return cf;
@@ -69,5 +96,21 @@ public class Anagrafica {
 
     public void setLuogo_nascita(String luogo_nascita) {
         this.luogo_nascita = luogo_nascita;
+    }
+
+    public Boolean getNato_maschio() {
+        return nato_maschio;
+    }
+
+    public void setNato_maschio(Boolean male) {
+        this.nato_maschio = male;
+    }
+
+    public String getProvincia_nascita() {
+        return provincia_nascita;
+    }
+
+    public void setProvincia_nascita(String provincia_nascita) {
+        this.provincia_nascita = provincia_nascita;
     }
 }
