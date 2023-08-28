@@ -1,15 +1,22 @@
 package com.filippoBarbieri.gestionePassaporti.entity;
 
 
-import java.sql.Date;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.sql.Date;
+import java.util.Calendar;
+
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
-import com.filippoBarbieri.gestionePassaporti.cfGeneration.CodiceFiscale;
-import com.filippoBarbieri.gestionePassaporti.cfGeneration.FormatException;
-import com.filippoBarbieri.gestionePassaporti.cfGeneration.CityNotFoundException;
+import org.json.JSONObject;
 
 @Entity
 public class Anagrafica {
@@ -31,6 +38,8 @@ public class Anagrafica {
     private String provincia_nascita;
     @NotNull
     private Boolean nato_maschio;
+    @Transient
+    private static final Calendar CAL = Calendar.getInstance();
 
     public Anagrafica() {}
 
@@ -42,11 +51,30 @@ public class Anagrafica {
         this.luogo_nascita = luogo_nascita;
         this.nato_maschio = nato_maschio;
         this.provincia_nascita = provincia_nascita;
+        CAL.setTime(data_nascita);
+        cf = retrieveCf();
+    }
+
+    private String retrieveCf() {
         try {
-            cf = new CodiceFiscale(nome, cognome, nato_maschio, data_nascita, luogo_nascita, provincia_nascita).toString();
+            String apiUrlWithParams = "https://api.miocodicefiscale.com/calculate" +
+                    "?lname=" + URLEncoder.encode(cognome, StandardCharsets.UTF_8) +
+                    "&fname=" + URLEncoder.encode(nome, StandardCharsets.UTF_8) +
+                    "&gender=" + URLEncoder.encode((nato_maschio) ? "M" : "F", StandardCharsets.UTF_8) +
+                    "&city=" + URLEncoder.encode(luogo_nascita, StandardCharsets.UTF_8) +
+                    "&state=" + URLEncoder.encode(provincia_nascita, StandardCharsets.UTF_8) +
+                    "&day=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.DAY_OF_MONTH)), StandardCharsets.UTF_8) +
+                    "&month=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.MONTH)+1), StandardCharsets.UTF_8) +
+                    "&year=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.YEAR)), StandardCharsets.UTF_8) +
+                    "&omocodia_level=1&access_token=b8b3b094feb0088aa1d612e742690f1d3816e8a728ad034193a9c6c5c6a3e64d49e";
+            HttpRequest req = HttpRequest.newBuilder().uri(URI.create(apiUrlWithParams)).GET().build();
+            HttpResponse<String> response = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200)
+                return "";
+            return new JSONObject(response.body()).getJSONObject("data").getString("cf");
         }
-        catch (IOException | FormatException | CityNotFoundException e) {
-            System.out.println(e.getMessage());
+        catch (InterruptedException | IOException e) {
+            return "";
         }
     }
 
