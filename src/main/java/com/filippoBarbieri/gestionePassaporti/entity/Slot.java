@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
@@ -15,7 +14,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 public class Slot {
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

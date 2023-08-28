@@ -26,8 +26,6 @@ public class Cittadino {
     private Boolean figli_minori;
     @NotNull
     private Boolean diplomatico;
-    @NotNull
-    private Boolean di_servizio;
     @Column(length = 9)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String passaporto;
@@ -84,14 +82,6 @@ public class Cittadino {
 
     public void setDiplomatico(Boolean diplomatico) {
         this.diplomatico = diplomatico;
-    }
-
-    public Boolean getDi_servizio() {
-        return di_servizio;
-    }
-
-    public void setDi_servizio(Boolean di_servizio) {
-        this.di_servizio = di_servizio;
     }
 
     public String getCie() {
