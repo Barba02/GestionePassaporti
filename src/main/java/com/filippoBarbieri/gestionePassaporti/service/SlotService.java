@@ -49,7 +49,7 @@ public class SlotService {
     }
 
     public List<Slot> getSlots(String s, LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
-        Sede sede = Sede.valueOf(s);
+        Sede sede = Sede.valueOf(s.toUpperCase());
         if (from != null && to != null)
             return slotRepo.findAllBySedeAndDatetimeBetween(sede, from, to);
         if (from != null)
@@ -74,7 +74,7 @@ public class SlotService {
     public List<Slot> getSlotsNumber(String s, LocalDateTime dt, String st) throws IllegalArgumentException {
         Sede sede;
         try {
-            sede = Sede.valueOf(s);
+            sede = Sede.valueOf(s.toUpperCase());
         }
         catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Sede inesistente");
@@ -82,7 +82,7 @@ public class SlotService {
         if (st != null) {
             Stato stato;
             try {
-                 stato = Stato.valueOf(st);
+                 stato = Stato.valueOf(st.toUpperCase());
             }
             catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Tipo inesistente");
