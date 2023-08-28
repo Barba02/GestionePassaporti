@@ -69,7 +69,7 @@ public class Anagrafica {
                 "&day=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.DAY_OF_MONTH)), StandardCharsets.UTF_8) +
                 "&month=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.MONTH)+1), StandardCharsets.UTF_8) +
                 "&year=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.YEAR)), StandardCharsets.UTF_8) +
-                "&omocodia_level=1&access_token=b8b3b094feb0088aa1d612e742690f1d3816e8a728ad034193a9c6c5c6a3e64d49e";
+                "&access_token=b8b3b094feb0088aa1d612e742690f1d3816e8a728ad034193a9c6c5c6a3e64d49e";
         HttpRequest req = HttpRequest.newBuilder().uri(URI.create(apiUrlWithParams)).GET().build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() != 200)
