@@ -1,6 +1,6 @@
-insert into slot values ('2021-12-01 14:30:15', 'QUESTURA_VERONA', 'LIBERO', 'RILASCIO');
-insert into anagrafica values ('BRBFPP02R01E349J'), ('MRRCSR02C30E512F'), ('CNTDRD99M06A465H'), ('VRTNRC99T15E512P');
-insert into cittadino values ('2002-10-01', false, false, false, 'BRBFPP02R01E349J', 'Barbieri', 'Isola della Scala', 'Italiana', 'Filippo', 'psw', 'ts');
+insert into slot(sede, datetime, stato, tipo) values ('QUESTURA_VERONA', '2021-12-01 14:30:15', 'LIBERO', 'RILASCIO');
+insert into cittadino(anagrafica_cf, password, cie, figli_minori, diplomatico) values ('BRBFPP02R01E349J', 'P@ssw0rd', 'CA68583IM', false, false);
+insert into anagrafica(cf, nome, cognome, data_nascita, luogo_nascita, nazionalita) values ('BRBFPP02R01E349J', 'Filippo', 'Barbieri', '2002-10-01', 'Isola della Scala', 'Italiana');
 
 select * from slot;
 select * from cittadino;
