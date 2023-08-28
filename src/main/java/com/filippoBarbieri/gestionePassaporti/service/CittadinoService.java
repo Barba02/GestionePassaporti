@@ -24,9 +24,9 @@ public class CittadinoService {
     private AnagraficaRepository anagraficaRepo;
 
     public void registraCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException, IllegalArgumentException {
-        if (!anagraficaRepo.existsById(c.getCf()))
+        if (!anagraficaRepo.existsById(c.getAnagrafica().getCf()))
             throw new NoSuchElementException("Cittadino non presente nel database");
-        if (cittadinoRepo.existsById(c.getCf()))
+        if (cittadinoRepo.existsByAnagrafica_Cf(c.getAnagrafica().getCf()))
             throw new DuplicateKeyException("Cittadino già registrato");
         if (!Cittadino.isValid(c.getPassword()))
             throw new IllegalArgumentException("La password non rispetta i parametri di sicurezza");
@@ -35,7 +35,7 @@ public class CittadinoService {
     }
 
     public Cittadino getCittadino(String cf) throws NoSuchElementException {
-        Cittadino c = cittadinoRepo.findById(cf).orElse(null);
+        Cittadino c = cittadinoRepo.findByAnagrafica_Cf(cf).orElse(null);
         if (c == null)
             throw new NoSuchElementException("Cittadino non registrato");
         return c;
@@ -43,7 +43,7 @@ public class CittadinoService {
 
     public ModificaDTO<Cittadino> modificaCittadino(String cf, Cittadino c) throws NoSuchElementException, IllegalAccessException {
         ModificaDTO<Cittadino> mod = new ModificaDTO<>(getCittadino(cf));
-        mod.modifica(List.of(new String[]{"ts", "figli_minori", "diplomatico", "di_servizio"}), c);
+        mod.modifica(List.of(new String[]{"figli_minori", "diplomatico", "di_servizio", "cie", "passaporto", "scadenza_passaporto"}), c);
         Cittadino old = mod.getObj();
         String psw = c.getPassword();
         String hash = Cittadino.hashPassword(psw);
@@ -60,9 +60,9 @@ public class CittadinoService {
     }
 
     public List<Slot> getSlots(String cf) throws NoSuchElementException {
-        if (!cittadinoRepo.existsById(cf))
+        if (!cittadinoRepo.existsByAnagrafica_Cf(cf))
             throw new NoSuchElementException("Cittadino non registrato");
-        List<Slot> l = slotRepo.findAllByCittadino_Cf(cf);
+        List<Slot> l = slotRepo.findAllByCittadino_Anagrafica_Cf(cf);
         l.stream().parallel().forEach(s -> s.setCittadino(null));
         return l;
     }

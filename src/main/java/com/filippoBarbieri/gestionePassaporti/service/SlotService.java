@@ -54,7 +54,11 @@ public class SlotService {
     }
 
     public ModificaDTO<Slot> modificaSlot(IdSlot id, Slot s) throws NoSuchElementException, IllegalAccessException {
-        s.setCittadino(cittadinoRepo.findById(s.getCittadino().getCf()).orElse(null));
+        s.setCittadino(cittadinoRepo
+                .findByAnagrafica_Cf(s.getCittadino()
+                        .getAnagrafica()
+                        .getCf())
+                .orElse(null));
         ModificaDTO<Slot> mod = new ModificaDTO<>(getSlot(id));
         mod.modifica(List.of(new String[]{"tipo", "stato", "cittadino"}), s);
         slotRepo.save(mod.getObj());

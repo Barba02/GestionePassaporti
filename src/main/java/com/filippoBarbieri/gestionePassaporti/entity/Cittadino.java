@@ -2,30 +2,23 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.sql.Date;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.codec.digest.DigestUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Cittadino {
     @Id
-    @Column(length = 16)
-    private String cf;
+    @JsonIgnore
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    @OneToOne
+    @JoinColumn(referencedColumnName = "cf")
+    private Anagrafica anagrafica;
     @NotNull
-    private String nome;
-    @NotNull
-    private String cognome;
-    @NotNull
-    private String nazionalita;
-    @NotNull
-    private Date data_nascita;
-    @NotNull
-    private String luogo_nascita;
-    @NotNull
-    @Column(length = 20)
-    private String ts;
+    @Column(length = 9)
+    private String cie;
     @NotNull
     private String password;
     @NotNull
@@ -34,62 +27,9 @@ public class Cittadino {
     private Boolean diplomatico;
     @NotNull
     private Boolean di_servizio;
-
-    public String getCf() {
-        return cf;
-    }
-
-    public void setCf(String cf) {
-        this.cf = cf;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCognome() {
-        return cognome;
-    }
-
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
-    }
-
-    public String getNazionalita() {
-        return nazionalita;
-    }
-
-    public void setNazionalita(String nazionalita) {
-        this.nazionalita = nazionalita;
-    }
-
-    public Date getData_nascita() {
-        return data_nascita;
-    }
-
-    public void setData_nascita(Date data_nascita) {
-        this.data_nascita = data_nascita;
-    }
-
-    public String getLuogo_nascita() {
-        return luogo_nascita;
-    }
-
-    public void setLuogo_nascita(String luogo_nascita) {
-        this.luogo_nascita = luogo_nascita;
-    }
-
-    public String getTs() {
-        return ts;
-    }
-
-    public void setTs(String ts) {
-        this.ts = ts;
-    }
+    @Column(length = 9)
+    private String passaporto;
+    private Date scadenza_passaporto;
 
     public String getPassword() {
         return password;
@@ -109,6 +49,22 @@ public class Cittadino {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Anagrafica getAnagrafica() {
+        return anagrafica;
+    }
+
+    public void setAnagrafica(Anagrafica anagrafica) {
+        this.anagrafica = anagrafica;
     }
 
     public Boolean getFigli_minori() {
@@ -133,5 +89,29 @@ public class Cittadino {
 
     public void setDi_servizio(Boolean di_servizio) {
         this.di_servizio = di_servizio;
+    }
+
+    public String getCie() {
+        return cie;
+    }
+
+    public void setCie(String cie) {
+        this.cie = cie;
+    }
+
+    public String getPassaporto() {
+        return passaporto;
+    }
+
+    public void setPassaporto(String passaporto) {
+        this.passaporto = passaporto;
+    }
+
+    public Date getScadenza_passaporto() {
+        return scadenza_passaporto;
+    }
+
+    public void setScadenza_passaporto(Date scadenza_passaporto) {
+        this.scadenza_passaporto = scadenza_passaporto;
     }
 }
