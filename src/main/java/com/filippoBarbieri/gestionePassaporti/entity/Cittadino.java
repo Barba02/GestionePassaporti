@@ -17,9 +17,6 @@ public class Cittadino {
     @JoinColumn(referencedColumnName = "cf")
     private Anagrafica anagrafica;
     @NotNull
-    @Column(length = 20)
-    private String ts;
-    @NotNull
     @Column(length = 9)
     private String cie;
     @NotNull
@@ -68,14 +65,6 @@ public class Cittadino {
 
     public void setAnagrafica(Anagrafica anagrafica) {
         this.anagrafica = anagrafica;
-    }
-
-    public String getTs() {
-        return ts;
-    }
-
-    public void setTs(String ts) {
-        this.ts = ts;
     }
 
     public Boolean getFigli_minori() {
