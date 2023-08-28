@@ -35,6 +35,13 @@ public class GestionePassaportiApplicationTests {
 			Date.valueOf(LocalDate.of(1999, 8, 6)),
 			"Asiago",
 			"VI");
+	private static final Anagrafica patty = new Anagrafica("Patrizia",
+			"Martini",
+			false,
+			"Italiana",
+			Date.valueOf(LocalDate.of(1972, 3, 19)),
+			"Nogara",
+			"VR");
 
 	@Test
 	void contextLoads() {
@@ -44,6 +51,9 @@ public class GestionePassaportiApplicationTests {
 			anagraficaRepo.save(pier);
 		if ("CNTDRD99M06A465H".equals(dodi.getCf()))
 			anagraficaRepo.save(dodi);
-		assertEquals(3, anagraficaRepo.count());
+		System.out.println(patty.getCf());
+		if ("MRTPRZ72C59F918L".equals(patty.getCf()))
+			anagraficaRepo.save(patty);
+		assertEquals(4, anagraficaRepo.count());
 	}
 }
