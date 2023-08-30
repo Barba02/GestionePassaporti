@@ -28,9 +28,9 @@ public class CittadinoService {
             throw new NoSuchElementException("Cittadino non presente nel database");
         if (cittadinoRepo.existsByAnagrafica_Cf(c.getAnagrafica().getCf()))
             throw new DuplicateKeyException("Cittadino già registrato");
-        if (!Cittadino.isValid(c.getPassword()))
+        if (!c.getPassword().isValid())
             throw new IllegalArgumentException("La password non rispetta i parametri di sicurezza");
-        c.setPassword(Cittadino.hashPassword(c.getPassword()));
+        c.getPassword().hashPassword();
         cittadinoRepo.save(c);
     }
 
@@ -45,15 +45,12 @@ public class CittadinoService {
         ModificaDTO<Cittadino> mod = new ModificaDTO<>(getCittadino(cf));
         mod.modifica(List.of(new String[]{"figli_minori", "diplomatico", "cie", "passaporto", "scadenza_passaporto"}), c);
         Cittadino old = mod.getObj();
-        String psw = c.getPassword();
-        String hash = Cittadino.hashPassword(psw);
-        if (psw != null && !old.getPassword().equals(hash)) {
-            if (Cittadino.isValid(psw)) {
+        if (c.getPassword() != null && c.getPassword().isValid()) {
+            c.getPassword().hashPassword();
+            if (!c.getPassword().equals(old.getPassword())) {
+                old.setPassword(c.getPassword());
                 mod.setUpdated(mod.getUpdated() + "|password");
-                old.setPassword(hash);
             }
-            else
-                mod.setUpdated(mod.getUpdated() + "|password not valid");
         }
         cittadinoRepo.save(old);
         return mod;

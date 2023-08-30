@@ -42,7 +42,7 @@ public class CittadinoController extends Controller {
     public ResponseEntity<Object> getCittadino(@PathVariable String cf) {
         try {
             Cittadino c = service.getCittadino(cf);
-            c.hidePassword();
+            c.getPassword().hide();
             return new ResponseEntity<>(c, HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
@@ -66,7 +66,7 @@ public class CittadinoController extends Controller {
     public ResponseEntity<Object> modificaCittadino(@PathVariable String cf, @RequestBody Cittadino c) {
         try {
             ModificaDTO<Cittadino> newCitt = service.modificaCittadino(cf, c);
-            newCitt.getObj().hidePassword();
+            newCitt.getObj().getPassword().hide();
             return new ResponseEntity<>(newCitt, HttpStatus.OK);
         }
         catch(NoSuchElementException e) {

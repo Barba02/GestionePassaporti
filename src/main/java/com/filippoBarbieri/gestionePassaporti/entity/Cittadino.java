@@ -4,7 +4,6 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 import java.sql.Date;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.apache.commons.codec.digest.DigestUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -21,7 +20,7 @@ public class Cittadino {
     @Column(length = 9)
     private String cie;
     @NotNull
-    private String password;
+    private Password password;
     @NotNull
     private Boolean figli_minori;
     @NotNull
@@ -31,26 +30,6 @@ public class Cittadino {
     private String passaporto;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date scadenza_passaporto;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void hidePassword() {
-        password = "*".repeat(16);
-    }
-
-    static public String hashPassword(String password) {
-        return DigestUtils.sha256Hex(password);
-    }
-
-    public static boolean isValid(String password) {
-        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()-[{}]:;',?/*~$^+=<>]).{8,}$");
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public Long getId() {
         return id;
@@ -106,5 +85,13 @@ public class Cittadino {
 
     public void setScadenza_passaporto(Date scadenza_passaporto) {
         this.scadenza_passaporto = scadenza_passaporto;
+    }
+
+    public Password getPassword() {
+        return password;
+    }
+
+    public void setPassword(Password password) {
+        this.password = password;
     }
 }
