@@ -7,6 +7,7 @@ import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
+import com.filippoBarbieri.gestionePassaporti.entity.Password;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
 import org.springframework.transaction.annotation.Transactional;
 import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
@@ -25,7 +26,7 @@ public class CittadinoService {
 
     public void registraCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException, IllegalArgumentException {
         if (!anagraficaRepo.existsById(c.getAnagrafica().getCf()))
-            throw new NoSuchElementException("Cittadino non presente nel database");
+            throw new NoSuchElementException("Cittadino inesistente");
         if (cittadinoRepo.existsByAnagrafica_Cf(c.getAnagrafica().getCf()))
             throw new DuplicateKeyException("Cittadino già registrato");
         if (!c.getPassword().isValid())
@@ -62,5 +63,14 @@ public class CittadinoService {
         List<Slot> l = slotRepo.findAllByCittadino_Anagrafica_Cf(cf);
         l.stream().parallel().forEach(s -> s.setCittadino(null));
         return l;
+    }
+
+    public Cittadino login(String cf, String password) throws NoSuchElementException {
+        Cittadino c = getCittadino(cf);
+        Password psw = new Password(password);
+        psw.hashPassword();
+        if (!psw.equals(c.getPassword()))
+            throw new IllegalArgumentException("Password errata");
+        return c;
     }
 }
