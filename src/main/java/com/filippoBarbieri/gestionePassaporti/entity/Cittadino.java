@@ -1,7 +1,7 @@
 package com.filippoBarbieri.gestionePassaporti.entity;
 
 
-import java.sql.Date;
+import java.time.LocalDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +29,7 @@ public class Cittadino {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String passaporto;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Date scadenza_passaporto;
+    private LocalDate scadenza_passaporto;
 
     public Long getId() {
         return id;
@@ -79,11 +79,11 @@ public class Cittadino {
         this.passaporto = passaporto;
     }
 
-    public Date getScadenza_passaporto() {
+    public LocalDate getScadenza_passaporto() {
         return scadenza_passaporto;
     }
 
-    public void setScadenza_passaporto(Date scadenza_passaporto) {
+    public void setScadenza_passaporto(LocalDate scadenza_passaporto) {
         this.scadenza_passaporto = scadenza_passaporto;
     }
 

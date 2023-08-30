@@ -1,7 +1,6 @@
 package com.filippoBarbieri.gestionePassaporti;
 
 
-import java.sql.Date;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,28 +17,28 @@ public class GestionePassaportiApplicationTests {
 			"Barbieri",
 			true,
 			"Italiana",
-			Date.valueOf(LocalDate.of(2002, 10, 1)),
+			LocalDate.of(2002, 10, 1),
 			"Isola della Scala",
 			"VR");
 	private static final Anagrafica pier = new Anagrafica("Piergiorgio",
 			"Rocchetto",
 			true,
 			"Italiana",
-			Date.valueOf(LocalDate.of(1999, 10, 21)),
+			LocalDate.of(1999, 10, 21),
 			"Verona",
 			"VR");
 	private static final Anagrafica dodi = new Anagrafica("Edoardo",
 			"Cantiero",
 			true,
 			"Italiana",
-			Date.valueOf(LocalDate.of(1999, 8, 6)),
+			LocalDate.of(1999, 8, 6),
 			"Asiago",
 			"VI");
 	private static final Anagrafica patty = new Anagrafica("Patrizia",
 			"Martini",
 			false,
 			"Italiana",
-			Date.valueOf(LocalDate.of(1972, 3, 19)),
+			LocalDate.of(1972, 3, 19),
 			"Nogara",
 			"VR");
 
@@ -51,7 +50,6 @@ public class GestionePassaportiApplicationTests {
 			anagraficaRepo.save(pier);
 		if ("CNTDRD99M06A465H".equals(dodi.getCf()))
 			anagraficaRepo.save(dodi);
-		System.out.println(patty.getCf());
 		if ("MRTPRZ72C59F918L".equals(patty.getCf()))
 			anagraficaRepo.save(patty);
 		assertEquals(4, anagraficaRepo.count());

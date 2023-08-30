@@ -2,8 +2,7 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.net.URI;
-import java.sql.Date;
-import java.util.Calendar;
+import java.time.LocalDate;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -13,7 +12,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
-import jakarta.persistence.Transient;
 import java.nio.charset.StandardCharsets;
 import jakarta.validation.constraints.NotNull;
 
@@ -29,7 +27,7 @@ public class Anagrafica {
     @NotNull
     private String nazionalita;
     @NotNull
-    private Date data_nascita;
+    private LocalDate data_nascita;
     @NotNull
     private String luogo_nascita;
     @NotNull
@@ -37,12 +35,10 @@ public class Anagrafica {
     private String provincia_nascita;
     @NotNull
     private Boolean nato_maschio;
-    @Transient
-    private static final Calendar CAL = Calendar.getInstance();
 
     public Anagrafica() {}
 
-    public Anagrafica(String nome, String cognome, Boolean nato_maschio, String nazionalita, Date data_nascita, String luogo_nascita, String provincia_nascita) {
+    public Anagrafica(String nome, String cognome, Boolean nato_maschio, String nazionalita, LocalDate data_nascita, String luogo_nascita, String provincia_nascita) {
         this.nome = nome;
         this.cognome = cognome;
         this.nazionalita = nazionalita;
@@ -50,7 +46,6 @@ public class Anagrafica {
         this.luogo_nascita = luogo_nascita;
         this.nato_maschio = nato_maschio;
         this.provincia_nascita = provincia_nascita;
-        CAL.setTime(data_nascita);
         try {
             cf = retrieveCf();
         }
@@ -66,9 +61,9 @@ public class Anagrafica {
                 "&gender=" + URLEncoder.encode((nato_maschio) ? "M" : "F", StandardCharsets.UTF_8) +
                 "&city=" + URLEncoder.encode(luogo_nascita, StandardCharsets.UTF_8) +
                 "&state=" + URLEncoder.encode(provincia_nascita, StandardCharsets.UTF_8) +
-                "&day=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.DAY_OF_MONTH)), StandardCharsets.UTF_8) +
-                "&month=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.MONTH)+1), StandardCharsets.UTF_8) +
-                "&year=" + URLEncoder.encode(String.valueOf(CAL.get(Calendar.YEAR)), StandardCharsets.UTF_8) +
+                "&day=" + URLEncoder.encode(String.valueOf(data_nascita.getDayOfMonth()), StandardCharsets.UTF_8) +
+                "&month=" + URLEncoder.encode(String.valueOf(data_nascita.getMonthValue()), StandardCharsets.UTF_8) +
+                "&year=" + URLEncoder.encode(String.valueOf(data_nascita.getYear()), StandardCharsets.UTF_8) +
                 "&access_token=b8b3b094feb0088aa1d612e742690f1d3816e8a728ad034193a9c6c5c6a3e64d49e";
         HttpRequest req = HttpRequest.newBuilder().uri(URI.create(apiUrlWithParams)).GET().build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
@@ -109,11 +104,11 @@ public class Anagrafica {
         this.nazionalita = nazionalita;
     }
 
-    public Date getData_nascita() {
+    public LocalDate getData_nascita() {
         return data_nascita;
     }
 
-    public void setData_nascita(Date data_nascita) {
+    public void setData_nascita(LocalDate data_nascita) {
         this.data_nascita = data_nascita;
     }
 
