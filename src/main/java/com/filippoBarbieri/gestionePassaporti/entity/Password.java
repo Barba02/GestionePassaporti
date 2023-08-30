@@ -10,6 +10,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class Password {
     private String password;
 
+    public Password() {}
+
+    public Password(String password) {
+        this.password = password;
+    }
+
     public String getPassword() {
         return password;
     }
