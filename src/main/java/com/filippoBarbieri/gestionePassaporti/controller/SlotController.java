@@ -3,8 +3,6 @@ package com.filippoBarbieri.gestionePassaporti.controller;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
-
-import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

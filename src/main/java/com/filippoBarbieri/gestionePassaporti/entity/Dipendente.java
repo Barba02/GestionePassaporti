@@ -2,7 +2,6 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.util.Set;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
@@ -23,7 +22,8 @@ public class Dipendente {
     @Enumerated(EnumType.STRING)
     private Sede sede;
     @NotNull
-    private Set<Giorni> disponibilita;
+    @Column(length = 19)
+    private String disponibilita;
 
     public String getUsername() {
         return username;
@@ -65,11 +65,11 @@ public class Dipendente {
         this.sede = sede;
     }
 
-    public Set<Giorni> getDisponibilita() {
+    public String getDisponibilita() {
         return disponibilita;
     }
 
-    public void setDisponibilita(Set<Giorni> disponibilita) {
+    public void setDisponibilita(String disponibilita) {
         this.disponibilita = disponibilita;
     }
 }
