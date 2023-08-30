@@ -66,7 +66,7 @@ public class SlotService {
                         .getCf())
                 .orElse(null));
         ModificaDTO<Slot> mod = new ModificaDTO<>(getSlot(id));
-        mod.modifica(List.of(new String[]{"tipo", "stato", "cittadino"}), s);
+        mod.modifica(List.of(new String[]{"tipo", "stato", "cittadino", "dipendente"}), s);
         slotRepo.save(mod.getObj());
         return mod;
     }

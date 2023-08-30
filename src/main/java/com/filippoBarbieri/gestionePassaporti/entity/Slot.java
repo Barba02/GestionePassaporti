@@ -30,6 +30,9 @@ public class Slot {
     @OneToOne
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Cittadino cittadino;
+    @OneToOne
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Dipendente dipendente;
 
     public LocalDateTime getDatetime() {
         return datetime;
@@ -71,5 +74,21 @@ public class Slot {
 
     public void setCittadino(Cittadino cittadino) {
         this.cittadino = cittadino;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Dipendente getDipendente() {
+        return dipendente;
+    }
+
+    public void setDipendente(Dipendente dipendente) {
+        this.dipendente = dipendente;
     }
 }
