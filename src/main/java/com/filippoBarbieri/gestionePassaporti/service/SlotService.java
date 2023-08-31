@@ -57,15 +57,36 @@ public class SlotService {
         return s;
     }
 
-    public List<Slot> getSlots(String s, LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
-        Sede sede = Sede.valueOf(s.toUpperCase());
-        if (from != null && to != null)
-            return slotRepo.findAllBySedeAndDatetimeBetween(sede, from, to);
-        if (from != null)
-            return slotRepo.findAllBySedeAndDatetimeAfter(sede, from);
-        if (to != null)
-            return slotRepo.findAllBySedeAndDatetimeBefore(sede, to);
-        return slotRepo.findAllBySede(sede);
+    public List<Slot> getSlots(String s, String st, LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
+        List<Slot> lista;
+        try {
+            Sede sede = Sede.valueOf(s.toUpperCase());
+            if (from != null && to != null)
+                lista = slotRepo.findAllBySedeAndDatetimeBetween(sede, from, to);
+            else if (from != null) {
+                lista = slotRepo.findAllBySedeAndDatetime(sede, from);
+                lista.addAll(slotRepo.findAllBySedeAndDatetimeAfter(sede, from));
+            }
+            else if (to != null) {
+                lista = slotRepo.findAllBySedeAndDatetimeBefore(sede, to);
+                lista.addAll(slotRepo.findAllBySedeAndDatetime(sede, to));
+            }
+            else
+                lista = slotRepo.findAllBySede(sede);
+        }
+        catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Sede non valida");
+        }
+        if (st != null) {
+            try {
+                Stato stato = Stato.valueOf(st.toUpperCase());
+                lista = lista.stream().filter(el -> stato.equals(el.getStato())).collect(Collectors.toList());
+            }
+            catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Stato non valido");
+            }
+        }
+        return lista;
     }
 
     public ModificaDTO<Slot> modificaSlot(Long id, Slot s) throws NoSuchElementException, IllegalAccessException, IllegalArgumentException {

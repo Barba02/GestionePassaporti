@@ -40,7 +40,7 @@ public class SlotController extends Controller {
             return getSlot(Long.parseLong(obj));
         }
         catch(NumberFormatException e) {
-            return getSlots(obj, from, to);
+            return getSlots(obj, stato, from, to);
         }
     }
     public ResponseEntity<Object> getSlot(Long id) {
@@ -52,12 +52,12 @@ public class SlotController extends Controller {
                     HttpStatus.NOT_FOUND);
         }
     }
-    public ResponseEntity<Object> getSlots(String sede, LocalDateTime from, LocalDateTime to) {
+    public ResponseEntity<Object> getSlots(String sede, String stato, LocalDateTime from, LocalDateTime to) {
         try {
-            return new ResponseEntity<>(service.getSlots(sede, from, to), HttpStatus.OK);
+            return new ResponseEntity<>(service.getSlots(sede, stato, from, to), HttpStatus.OK);
         }
         catch(IllegalArgumentException e) {
-            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), "Sede inesistente"),
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
                     HttpStatus.BAD_REQUEST);
         }
     }
