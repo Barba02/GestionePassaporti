@@ -88,4 +88,9 @@ public class SlotController extends Controller {
                     HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public ResponseEntity<Object> login(String[] cred) {
+        return new ResponseEntity<>("Metodo non permesso", HttpStatus.FORBIDDEN);
+    }
 }
