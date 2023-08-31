@@ -29,7 +29,6 @@ public class SlotController extends Controller {
         }
     }
 
-    /*TODO: refactor*/
     @GetMapping(path = "/{obj}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getMapping(@PathVariable String obj,
                                              @RequestParam(required = false) LocalDateTime from,

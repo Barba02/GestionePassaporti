@@ -32,7 +32,7 @@ public class Cittadino {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDate scadenza_passaporto;
     @OneToMany
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonIgnore
     private List<Slot> slots;
 
     public Long getId() {
@@ -97,13 +97,5 @@ public class Cittadino {
 
     public void setPassword(Password password) {
         this.password = password;
-    }
-
-    public List<Slot> getSlots() {
-        return slots;
-    }
-
-    public void setSlots(List<Slot> slots) {
-        this.slots = slots;
     }
 }

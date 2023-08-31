@@ -4,7 +4,7 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 import java.util.List;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
 
 @Entity
@@ -25,7 +25,7 @@ public class Dipendente {
     @Column(length = 40)
     private String disponibilita;
     @OneToMany
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonIgnore
     private List<Slot> slots;
 
     public String getUsername() {
@@ -74,13 +74,5 @@ public class Dipendente {
 
     public void setDisponibilita(String disponibilita) {
         this.disponibilita = disponibilita;
-    }
-
-    public List<Slot> getSlots() {
-        return slots;
-    }
-
-    public void setSlots(List<Slot> slots) {
-        this.slots = slots;
     }
 }

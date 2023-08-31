@@ -4,5 +4,6 @@ package com.filippoBarbieri.gestionePassaporti.enums;
 public enum Stato {
     OCCUPATO,
     LIBERO,
-    NON_GESTITO
+    NON_GESTITO,
+    SCADUTO
 }

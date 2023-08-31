@@ -1,7 +1,11 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
+import java.util.List;
 import java.util.NoSuchElementException;
+
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
+import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.entity.Password;
@@ -12,6 +16,8 @@ import com.filippoBarbieri.gestionePassaporti.repository.DipendenteRepository;
 @Service
 @Transactional
 public class DipendenteService {
+    @Autowired
+    private SlotRepository slotRepo;
     @Autowired
     private DipendenteRepository dipendenteRepo;
 
@@ -29,5 +35,9 @@ public class DipendenteService {
         if (!psw.equals(d.getPassword()))
             throw new IllegalArgumentException("Password errata");
         return d;
+    }
+
+    public List<Slot> getSlots(String username) throws NoSuchElementException {
+        return slotRepo.findAllByDipendente(getDipendente(username));
     }
 }

@@ -2,6 +2,8 @@ package com.filippoBarbieri.gestionePassaporti.service;
 
 
 import java.util.*;
+
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +65,9 @@ public class CittadinoService {
         if (!psw.equals(c.getPassword()))
             throw new IllegalArgumentException("Password errata");
         return c;
+    }
+
+    public List<Slot> getSlots(String cf) throws NoSuchElementException {
+        return slotRepo.findAllByCittadino(getCittadino(cf));
     }
 }
