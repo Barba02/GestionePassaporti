@@ -12,10 +12,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Repository
 public interface SlotRepository extends JpaRepository<Slot, Long> {
     List<Slot> findAllBySede(Sede sede);
+    List<Slot> findAllByCittadino_Anagrafica_Cf(String cf);
     List<Slot> findAllByDatetimeAndSede(LocalDateTime dt, Sede s);
     List<Slot> findAllByDatetimeAndSedeAndStato(LocalDateTime dt, Sede s, Stato st);
-    List<Slot> findAllByCittadino_Anagrafica_Cf(String cf);
     List<Slot> findAllBySedeAndDatetimeAfter(Sede sede, LocalDateTime from);
     List<Slot> findAllBySedeAndDatetimeBefore(Sede sede, LocalDateTime to);
     List<Slot> findAllBySedeAndDatetimeBetween(Sede sede, LocalDateTime from, LocalDateTime to);
+    Slot findFirstByOrderByDatetimeDesc();
 }

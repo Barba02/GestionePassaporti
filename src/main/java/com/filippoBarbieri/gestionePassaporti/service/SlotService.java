@@ -1,9 +1,13 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
+import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
@@ -11,11 +15,14 @@ import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
 import com.filippoBarbieri.gestionePassaporti.enums.Stato;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import org.springframework.transaction.annotation.Transactional;
+import com.filippoBarbieri.gestionePassaporti.entity.Dipendente;
 import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.CittadinoRepository;
+import com.filippoBarbieri.gestionePassaporti.repository.DipendenteRepository;
 
 @Service
 @Transactional
@@ -24,6 +31,8 @@ public class SlotService {
     private SlotRepository slotRepo;
     @Autowired
     private CittadinoRepository cittadinoRepo;
+    @Autowired
+    private DipendenteRepository dipendenteRepo;
 
     public void inserisciSlot(Slot s) throws DuplicateKeyException, IllegalArgumentException {
         if (!s.getDatetime().isAfter(LocalDateTime.now()))
@@ -71,24 +80,34 @@ public class SlotService {
         return mod;
     }
 
-    public List<Slot> getSlotsNumber(String s, LocalDateTime dt, String st) throws IllegalArgumentException {
-        Sede sede;
-        try {
-            sede = Sede.valueOf(s.toUpperCase());
-        }
-        catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Sede inesistente");
-        }
-        if (st != null) {
-            Stato stato;
-            try {
-                 stato = Stato.valueOf(st.toUpperCase());
+    private static final LocalTime[] slotTimes = {
+            LocalTime.of(8, 0), LocalTime.of(8, 30),
+            LocalTime.of(9, 0), LocalTime.of(9, 30),
+            LocalTime.of(10, 0), LocalTime.of(10, 30),
+            LocalTime.of(11, 0), LocalTime.of(11, 30),
+            LocalTime.of(14, 0), LocalTime.of(14, 30),
+            LocalTime.of(15, 0), LocalTime.of(15, 30),
+            LocalTime.of(16, 0), LocalTime.of(16, 30),
+            LocalTime.of(17, 0), LocalTime.of(17, 30)
+    };
+    @Scheduled(fixedRate = 43200000)
+    public void generaSlot() {
+        LocalDate oggi = LocalDate.now();
+        Slot s = slotRepo.findFirstByOrderByDatetimeDesc();
+        if (!(s == null || s.getDatetime().toLocalDate().equals(oggi)))
+            return;
+        LocalDate domani = oggi.plusDays(1);
+        Map<Sede, List<Dipendente>> dipendentiPerSede = dipendenteRepo.findAll().stream()
+                .collect(Collectors.groupingBy(Dipendente::getSede));
+        for (Map.Entry<Sede, List<Dipendente>> entry : dipendentiPerSede.entrySet()) {
+            for (Dipendente d : entry.getValue()) {
+                if (d.getDisponibilita().contains(domani.getDayOfWeek().name())) {
+                    for (LocalTime t : slotTimes) {
+                        LocalDateTime dt = domani.atTime(t);
+                        slotRepo.save(new Slot(dt, entry.getKey(), d));
+                    }
+                }
             }
-            catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Tipo inesistente");
-            }
-            return slotRepo.findAllByDatetimeAndSedeAndStato(dt, sede, stato);
         }
-        return slotRepo.findAllByDatetimeAndSede(dt, sede);
     }
 }

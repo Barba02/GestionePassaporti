@@ -29,10 +29,13 @@ public class SlotController extends Controller {
         }
     }
 
+    /*TODO: refactor*/
     @GetMapping(path = "/{obj}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getMapping(@PathVariable String obj,
                                              @RequestParam(required = false) LocalDateTime from,
-                                             @RequestParam(required = false) LocalDateTime to) {
+                                             @RequestParam(required = false) LocalDateTime to,
+                                             @RequestParam(required = false) String stato) {
+
         try {
             return getSlot(Long.parseLong(obj));
         }
@@ -40,7 +43,6 @@ public class SlotController extends Controller {
             return getSlots(obj, from, to);
         }
     }
-
     public ResponseEntity<Object> getSlot(Long id) {
         try {
             return new ResponseEntity<>(service.getSlot(id), HttpStatus.OK);
@@ -50,26 +52,12 @@ public class SlotController extends Controller {
                     HttpStatus.NOT_FOUND);
         }
     }
-
     public ResponseEntity<Object> getSlots(String sede, LocalDateTime from, LocalDateTime to) {
         try {
             return new ResponseEntity<>(service.getSlots(sede, from, to), HttpStatus.OK);
         }
         catch(IllegalArgumentException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), "Sede inesistente"),
-                    HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping(path = "/{sede}/{dt}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getSlotsNumber(@PathVariable String sede,
-                                                 @PathVariable LocalDateTime dt,
-                                                 @RequestParam(required = false) String stato) {
-        try {
-            return new ResponseEntity<>(service.getSlotsNumber(sede, dt, stato), HttpStatus.OK);
-        }
-        catch(IllegalArgumentException e) {
-            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
                     HttpStatus.BAD_REQUEST);
         }
     }

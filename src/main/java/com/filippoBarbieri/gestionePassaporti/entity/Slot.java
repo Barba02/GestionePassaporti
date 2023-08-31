@@ -24,15 +24,24 @@ public class Slot {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Stato stato;
-    @NotNull
     @Enumerated(EnumType.STRING)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Tipo tipo;
-    @OneToOne
+    @ManyToOne
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Cittadino cittadino;
-    @OneToOne
+    @ManyToOne
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Dipendente dipendente;
+
+    public Slot() {}
+
+    public Slot(LocalDateTime datetime, Sede sede, Dipendente dipendente) {
+        this.datetime =datetime;
+        this.sede = sede;
+        this.dipendente = dipendente;
+        stato = Stato.NON_GESTITO;
+    }
 
     public LocalDateTime getDatetime() {
         return datetime;
@@ -85,6 +94,8 @@ public class Slot {
     }
 
     public Dipendente getDipendente() {
+        if (dipendente != null && dipendente.getPassword() != null)
+            dipendente.getPassword().hide();
         return dipendente;
     }
 

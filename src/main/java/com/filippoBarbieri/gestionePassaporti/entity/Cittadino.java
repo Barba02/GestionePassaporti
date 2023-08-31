@@ -1,6 +1,7 @@
 package com.filippoBarbieri.gestionePassaporti.entity;
 
 
+import java.util.List;
 import java.time.LocalDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,6 +31,9 @@ public class Cittadino {
     private String passaporto;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDate scadenza_passaporto;
+    @OneToMany
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<Slot> slots;
 
     public Long getId() {
         return id;
@@ -93,5 +97,13 @@ public class Cittadino {
 
     public void setPassword(Password password) {
         this.password = password;
+    }
+
+    public List<Slot> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(List<Slot> slots) {
+        this.slots = slots;
     }
 }

@@ -51,17 +51,6 @@ public class CittadinoController extends Controller {
         }
     }
 
-    @GetMapping(path = "/{cf}/slots", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getSlots(@PathVariable String cf) {
-        try {
-            return new ResponseEntity<>(service.getSlots(cf), HttpStatus.OK);
-        }
-        catch(NoSuchElementException e) {
-            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
-                    HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PutMapping(path = "/{cf}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
     public ResponseEntity<Object> modificaCittadino(@PathVariable String cf, @RequestBody Cittadino c) {
         try {
