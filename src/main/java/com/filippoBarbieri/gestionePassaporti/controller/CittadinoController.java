@@ -38,6 +38,11 @@ public class CittadinoController extends Controller {
         }
     }
 
+    @PostMapping(path = "/login", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
+    public ResponseEntity<Object> login(@RequestBody String[] cred) {
+        return loginTemplate(cred[0], cred[1]);
+    }
+
     @GetMapping(path = "/{cf}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getCittadino(@PathVariable String cf) {
         try {

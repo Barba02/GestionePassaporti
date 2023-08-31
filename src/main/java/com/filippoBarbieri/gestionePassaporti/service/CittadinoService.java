@@ -56,7 +56,7 @@ public class CittadinoService {
         return mod;
     }
 
-    public Cittadino login(String cf, String password) throws NoSuchElementException {
+    public Cittadino login(String cf, String password) throws NoSuchElementException, IllegalArgumentException {
         Cittadino c = getCittadino(cf);
         Password psw = new Password(password);
         psw.hashPassword();
