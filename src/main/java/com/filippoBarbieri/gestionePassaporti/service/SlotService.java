@@ -90,23 +90,36 @@ public class SlotService {
             LocalTime.of(16, 0), LocalTime.of(16, 30),
             LocalTime.of(17, 0), LocalTime.of(17, 30)
     };
-    @Scheduled(fixedRate = 43200000)
-    public void generaSlot() {
-        LocalDate oggi = LocalDate.now();
-        Slot s = slotRepo.findFirstByOrderByDatetimeDesc();
-        if (!(s == null || s.getDatetime().toLocalDate().equals(oggi)))
-            return;
-        LocalDate domani = oggi.plusDays(1);
-        Map<Sede, List<Dipendente>> dipendentiPerSede = dipendenteRepo.findAll().stream()
-                .collect(Collectors.groupingBy(Dipendente::getSede));
-        for (Map.Entry<Sede, List<Dipendente>> entry : dipendentiPerSede.entrySet()) {
+    public void salvaSlot(LocalDate giorno) {
+        for (Map.Entry<Sede, List<Dipendente>> entry : dipendenteRepo.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(Dipendente::getSede))
+                .entrySet()) {
             for (Dipendente d : entry.getValue()) {
-                if (d.getDisponibilita().contains(domani.getDayOfWeek().name())) {
+                if (d.getDisponibilita().contains(giorno.getDayOfWeek().name())) {
                     for (LocalTime t : slotTimes) {
-                        LocalDateTime dt = domani.atTime(t);
+                        LocalDateTime dt = giorno.atTime(t);
                         slotRepo.save(new Slot(dt, entry.getKey(), d));
                     }
                 }
+            }
+        }
+    }
+    @Scheduled(fixedRate = 86400000)
+    public void generaSlot() {
+        Slot s = slotRepo.findFirstByOrderByDatetimeDesc();
+        if (s == null) {
+            LocalDate domani = LocalDate.now().plusDays(1);
+            for (int i = 0; i < 7; i++) {
+                salvaSlot(domani);
+                domani = domani.plusDays(1);
+            }
+        }
+        else {
+            LocalDate settimanaProx = LocalDate.now().plusDays(7);
+            while (settimanaProx.isAfter(s.getDatetime().toLocalDate())) {
+                salvaSlot(settimanaProx);
+                settimanaProx = settimanaProx.minusDays(1);
             }
         }
     }
