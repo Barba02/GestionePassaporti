@@ -2,10 +2,9 @@ package com.filippoBarbieri.gestionePassaporti.service;
 
 
 import java.util.*;
-
-import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import com.filippoBarbieri.gestionePassaporti.entity.Password;
@@ -46,15 +45,8 @@ public class CittadinoService {
     public ModificaDTO<Cittadino> modificaCittadino(String cf, Cittadino c) throws NoSuchElementException, IllegalAccessException {
         ModificaDTO<Cittadino> mod = new ModificaDTO<>(getCittadino(cf));
         mod.modifica(List.of(new String[]{"figli_minori", "diplomatico", "cie", "passaporto", "scadenza_passaporto"}), c);
-        Cittadino old = mod.getObj();
-        if (c.getPassword() != null && c.getPassword().isValid()) {
-            c.getPassword().hashPassword();
-            if (!c.getPassword().equals(old.getPassword())) {
-                old.setPassword(c.getPassword());
-                mod.setUpdated(mod.getUpdated() + "|password");
-            }
-        }
-        cittadinoRepo.save(old);
+        mod.modificaPassword(c.getPassword());
+        cittadinoRepo.save(mod.getObj());
         return mod;
     }
 

@@ -3,14 +3,14 @@ package com.filippoBarbieri.gestionePassaporti.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import com.filippoBarbieri.gestionePassaporti.entity.Slot;
-import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
 import org.springframework.stereotype.Service;
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
+import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.entity.Password;
 import org.springframework.transaction.annotation.Transactional;
 import com.filippoBarbieri.gestionePassaporti.entity.Dipendente;
+import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.DipendenteRepository;
 
 @Service
@@ -35,6 +35,14 @@ public class DipendenteService {
         if (!psw.equals(d.getPassword()))
             throw new IllegalArgumentException("Password errata");
         return d;
+    }
+
+    public ModificaDTO<Dipendente> modificaDipendente(String username, Dipendente d) throws NoSuchElementException, IllegalAccessException {
+        ModificaDTO<Dipendente> mod = new ModificaDTO<>(getDipendente(username));
+        mod.modifica(List.of(new String[]{"sede", "disponibilita"}), d);
+        mod.modificaPassword(d.getPassword());
+        dipendenteRepo.save(mod.getObj());
+        return mod;
     }
 
     public List<Slot> getSlots(String username) throws NoSuchElementException {

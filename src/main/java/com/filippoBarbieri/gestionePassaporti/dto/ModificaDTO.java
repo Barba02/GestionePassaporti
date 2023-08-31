@@ -4,6 +4,7 @@ package com.filippoBarbieri.gestionePassaporti.dto;
 import java.util.List;
 import java.lang.reflect.Field;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.filippoBarbieri.gestionePassaporti.entity.Password;
 
 public class ModificaDTO<T> {
     private T obj;
@@ -42,5 +43,26 @@ public class ModificaDTO<T> {
             }
         }
         updated = (updated.isEmpty()) ? null : updated.substring(0, updated.length() - 1);
+    }
+
+    public void modificaPassword(Password newPassword) throws IllegalAccessException {
+        if (updated == null)
+            updated = "";
+        try {
+            Field f = obj.getClass().getDeclaredField("password");
+            f.setAccessible(true);
+            if (newPassword != null && newPassword.isValid()) {
+                newPassword.hashPassword();
+                if (!newPassword.equals(f.get(obj))) {
+                    f.set(obj, newPassword);
+                    if (!updated.isEmpty())
+                        updated += "|";
+                    updated += "password";
+                }
+            }
+        }
+        catch (NoSuchFieldException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

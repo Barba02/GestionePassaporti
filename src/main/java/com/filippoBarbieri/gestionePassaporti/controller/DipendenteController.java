@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
+import com.filippoBarbieri.gestionePassaporti.entity.Dipendente;
 import com.filippoBarbieri.gestionePassaporti.service.DipendenteService;
 
 @RestController
@@ -23,6 +25,23 @@ public class DipendenteController extends Controller {
         catch(NoSuchElementException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
                     HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping(path = "/{username}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
+    public ResponseEntity<Object> modificaCittadino(@PathVariable String username, @RequestBody Dipendente d) {
+        try {
+            ModificaDTO<Dipendente> newDip = service.modificaDipendente(username, d);
+            newDip.getObj().getPassword().hide();
+            return new ResponseEntity<>(newDip, HttpStatus.OK);
+        }
+        catch(NoSuchElementException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
+                    HttpStatus.NOT_FOUND);
+        }
+        catch(IllegalAccessException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
         }
     }
 }
