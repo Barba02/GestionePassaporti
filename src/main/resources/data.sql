@@ -5,6 +5,7 @@ insert ignore into anagrafica(cf, nome, cognome, nato_maschio, data_nascita, luo
 ('MRTPRZ72C59F918L', 'Patrizia', 'Martini', false, '1972-03-19', 'Nogara', 'Italiana', 'VR');
 
 insert ignore into dipendente(username, nome, cognome, password, sede, disponibilita) values
-('amari8', 'Andrea', 'Mariotto', '59195c6c541c8307f1da2d1e768d6f2280c984df217ad5f4c64c3542b04111a4', 'QUESTURA_VERONA', 'LUN|MAR'),
-('seg123', 'Filippo', 'Segala', 'ea42cfa102bd7aac62b7cc8f323802129072eca6c96585421adc1c5ace46c1dd', 'QUESTURA_VERONA', 'LUN|MER|VEN'),
-('gpalmo', 'Giordano', 'Palmoso', '6ae6c9e65bfcd71db43c104ca6bd45fbebfdf412523cbbdfa0334bc1f391679f', 'CONSOLATO_LAS_PALMAS', 'LUN|MAR|MER|GIO|VEN');
+('amari8', 'Andrea', 'Mariotto', '48b892a785f7fc1a614a7479e2dbe0c5218ac4a185470548b6fdfd445076e177', 'QUESTURA_VERONA', 'LUN|MAR'),
+('seg123', 'Filippo', 'Segala', '99562f8cb44cc377e05df7703bfe1053163c218f20df0ccae1df1d9d9b97f086', 'QUESTURA_VERONA', 'LUN|MER|VEN'),
+('gpalmo', 'Giordano', 'Palmoso', 'd26e90b0b4aa8988366893ebac4a5001fddc0d6096d9eef066e0bcad95822eab', 'CONSOLATO_LAS_PALMAS', 'LUN|MAR|MER|GIO|VEN'),
+('sbrinz', 'Alice', 'Sacchetto', 'a00d23745f16b42c2409599b0218a704ed725c1bc61823f82f172465cd7d2756', 'QUESTURA_PADOVA', 'MAR|GIO');

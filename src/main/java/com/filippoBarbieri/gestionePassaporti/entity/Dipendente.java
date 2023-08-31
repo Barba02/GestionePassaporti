@@ -1,11 +1,9 @@
 package com.filippoBarbieri.gestionePassaporti.entity;
 
 
-import java.util.Set;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import com.filippoBarbieri.gestionePassaporti.enums.Sede;
-import com.filippoBarbieri.gestionePassaporti.enums.Giorni;
 
 @Entity
 public class Dipendente {
