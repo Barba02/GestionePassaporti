@@ -5,5 +5,5 @@ public enum Stato {
     OCCUPATO,
     LIBERO,
     NON_GESTITO,
-    CHIUSO
+    SCADUTO
 }
