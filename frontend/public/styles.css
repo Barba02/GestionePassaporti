@@ -15,14 +15,14 @@ html, body {
 
 body > div {height: 100%;}
 
-div.riquadroLogin {
+div.homeBox {
     width: 64%;
     height: 100%;
     margin: auto;
     display: flex;
 }
 
-div.riquadroLogin div.bollinoLogin {
+div.homeBox div.homeChoice {
     width: 33.33%;
     display: flex;
     align-items: center;
@@ -30,9 +30,9 @@ div.riquadroLogin div.bollinoLogin {
     justify-content: center;
 }
 
-div.riquadroLogin div.bollinoLogin > * {cursor: pointer;}
+div.homeBox div.homeChoice > * {cursor: pointer;}
 
-div.riquadroLogin div.bollinoLogin i {
+div.homeBox div.homeChoice i {
     height: 128px;
     display: flex;
     width: 128px;
@@ -44,7 +44,7 @@ div.riquadroLogin div.bollinoLogin i {
     border: 4px solid rebeccapurple;
 }
 
-div.riquadroLogin div.bollinoLogin p {
+div.homeBox div.homeChoice p {
     font-size: 32px;
     text-align: center;
     margin: 16px 0 0;

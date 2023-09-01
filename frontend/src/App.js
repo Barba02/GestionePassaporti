@@ -1,22 +1,20 @@
-function Bollino({ link, icona, descrizione }) {
-    function handleClick() {
-        console.log(link);
-    }
-    return (
-        <div className="bollinoLogin">
-            <i className={icona} onClick={handleClick}></i>
-            <p dangerouslySetInnerHTML={{ __html: descrizione }} onClick={handleClick}></p>
-        </div>
-    );
-}
+import React from 'react';
+import Home from './home';
+import LoginCittadino from './loginCittadino';
+import LoginDipendente from './loginDipendente';
+import RegistrazioneCittadino from './registrazioneCittadino';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
     return (
-        <div className="riquadroLogin">
-          <Bollino link="login_cittadino" icona="fa-solid fa-user" descrizione="Login<br/>Cittadino" />
-          <Bollino link="registrazione_cittadino" icona="fa-solid fa-user-plus" descrizione="Registrazione<br/>Cittadino" />
-          <Bollino link="login_dipendente" icona="fa-solid fa-user-tie" descrizione="Login<br/>Dipendente" />
-        </div>
+        <Router>
+            <Routes>
+                <Route exact path='/' element={<Home />} />
+                <Route path='/loginCittadino' element={<LoginCittadino />} />
+                <Route path='/loginDipendente' element={<LoginDipendente />} />
+                <Route path='/registrazioneCittadino' element={<RegistrazioneCittadino />} />
+            </Routes>
+        </Router>
     );
 }
 
