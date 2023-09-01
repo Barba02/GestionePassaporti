@@ -11,9 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Entity
 public class Cittadino {
     @Id
-    @JsonIgnore
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private String email;
     @OneToOne
     @JoinColumn(referencedColumnName = "cf")
     private Anagrafica anagrafica;
@@ -35,12 +33,12 @@ public class Cittadino {
     @JsonIgnore
     private List<Slot> slots;
 
-    public Long getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Anagrafica getAnagrafica() {

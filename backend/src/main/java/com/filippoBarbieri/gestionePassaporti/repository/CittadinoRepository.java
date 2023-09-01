@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
 
 @Repository
-public interface CittadinoRepository extends JpaRepository<Cittadino, Long> {
+public interface CittadinoRepository extends JpaRepository<Cittadino, String> {
     Optional<Cittadino> findByAnagrafica_Cf(String cf);
     boolean existsByAnagrafica_Cf(String cf);
 }
