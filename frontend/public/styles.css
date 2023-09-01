@@ -1,0 +1,53 @@
+@import url('Kanit.css');
+
+* {
+    outline: none;
+    box-sizing: border-box;
+    font-family: 'Kanit', sans-serif;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+    color: rebeccapurple;
+    background-color: gainsboro;
+}
+
+body > div {height: 100%;}
+
+div.riquadroLogin {
+    width: 64%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+}
+
+div.riquadroLogin div.bollinoLogin {
+    width: 33.33%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.riquadroLogin div.bollinoLogin > * {cursor: pointer;}
+
+div.riquadroLogin div.bollinoLogin i {
+    height: 128px;
+    display: flex;
+    width: 128px;
+    font-size: 64px;
+    border-radius: 64px;
+    align-items: center;
+    color: rebeccapurple;
+    justify-content: center;
+    border: 4px solid rebeccapurple;
+}
+
+div.riquadroLogin div.bollinoLogin p {
+    font-size: 32px;
+    text-align: center;
+    margin: 16px 0 0;
+    font-weight: 500;
+    line-height: 1;
+}
