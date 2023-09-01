@@ -30,7 +30,14 @@ div.homeBox div.homeChoice {
     justify-content: center;
 }
 
-div.homeBox div.homeChoice > * {cursor: pointer;}
+div.homeBox div.homeChoice > * {
+    cursor: pointer;
+    transition: .1s ease-in-out;
+}
+div.homeBox div.homeChoice > *.hover {
+    color: slateblue;
+    border-color: slateblue;
+}
 
 div.homeBox div.homeChoice i {
     height: 128px;

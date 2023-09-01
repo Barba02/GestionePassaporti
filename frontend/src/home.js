@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useRef } from 'react';
 
 function QuadroHome({ link, icona, descrizione }) {
+	const iRef = useRef(null);
+	const pRef = useRef(null);
 	function handleClick() {
 		window.location.href = link;
 	}
+	function overElem() {
+		iRef.current.classList.add("hover");
+		pRef.current.classList.add("hover");
+	}
+	function outElem() {
+		iRef.current.classList.remove("hover");
+		pRef.current.classList.remove("hover");
+	}
 	return (
 		<div className="homeChoice">
-			<i className={icona} onClick={handleClick}></i>
-			<p dangerouslySetInnerHTML={{ __html: descrizione }} onClick={handleClick}></p>
+			<i ref={iRef} className={icona} onClick={handleClick} onMouseOver={overElem} onMouseOut={outElem}></i>
+			<p ref={pRef} dangerouslySetInnerHTML={{ __html: descrizione }} onClick={overElem} onMouseOver={overElem} onMouseOut={outElem}></p>
 		</div>
 	);
 }
