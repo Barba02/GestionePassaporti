@@ -8,7 +8,7 @@ import com.filippoBarbieri.gestionePassaporti.entity.Password;
 
 public class ModificaDTO<T> {
     private T obj;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String updated;
 
     public ModificaDTO(T obj) {
@@ -42,7 +42,7 @@ public class ModificaDTO<T> {
                 }
             }
         }
-        updated = (updated.isEmpty()) ? null : updated.substring(0, updated.length() - 1);
+        updated = (updated.isEmpty()) ? "" : updated.substring(0, updated.length() - 1);
     }
 
     public void modificaPassword(Password newPassword) throws IllegalAccessException {
