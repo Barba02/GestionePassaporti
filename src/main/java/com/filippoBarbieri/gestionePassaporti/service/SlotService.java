@@ -9,6 +9,8 @@ import java.time.LocalTime;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
+
+import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
@@ -90,11 +92,12 @@ public class SlotService {
     }
 
     public ModificaDTO<Slot> modificaSlot(Long id, Slot s) throws NoSuchElementException, IllegalAccessException, IllegalArgumentException {
-        s.setCittadino(cittadinoRepo
-                .findByAnagrafica_Cf(s.getCittadino()
-                        .getAnagrafica()
-                        .getCf())
-                .orElse(null));
+        if (s.getCittadino() == null)
+            s.setCittadino(null);
+        else
+            s.setCittadino(cittadinoRepo.findByAnagrafica_Cf(
+                    s.getCittadino().getAnagrafica().getCf())
+                    .orElse(null));
         ModificaDTO<Slot> mod = new ModificaDTO<>(getSlot(id));
         mod.modifica(List.of(new String[]{"tipo", "stato", "cittadino", "dipendente"}), s);
         slotRepo.save(mod.getObj());
@@ -142,6 +145,22 @@ public class SlotService {
                 salvaSlot(settimanaProx);
                 settimanaProx = settimanaProx.minusDays(1);
             }
+        }
+    }
+
+    @Scheduled(fixedRate = 7200000)
+    public void chiudiSlotPassati() {
+        Slot fake = new Slot();
+        fake.setStato(Stato.CHIUSO);
+        for (Sede s : Sede.values()) {
+            List<Slot> slotPassati = slotRepo.findAllBySedeAndDatetimeBefore(s, LocalDateTime.now());
+            slotPassati.forEach(slot -> {
+                try {
+                    modificaSlot(slot.getId(), fake);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            });
         }
     }
 }
