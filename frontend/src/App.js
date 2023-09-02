@@ -1,8 +1,8 @@
 import React from 'react';
-import Home from './home';
-import LoginCittadino from './loginCittadino';
-import LoginDipendente from './loginDipendente';
-import RegistrazioneCittadino from './registrazioneCittadino';
+import Home from './Home';
+import LoginCittadino from './LoginCittadino';
+import LoginDipendente from './LoginDipendente';
+import RegistrazioneCittadino from './RegistrazioneCittadino';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
