@@ -1,7 +1,10 @@
 import React from "react";
 
 function AreaPersonale() {
-	return <>{window.sessionStorage.getItem("user")}</>;
+	const user = window.sessionStorage.getItem("user");
+	if (user === null )
+		window.location.href = "/";
+	return <>{user}</>;
 }
 
 export default AreaPersonale;

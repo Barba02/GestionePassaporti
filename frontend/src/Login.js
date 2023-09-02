@@ -1,5 +1,5 @@
 import React from "react";
-import Form from "./Form";
+import Form from "./LoginForm";
 
 function Login() {
 	if (window.location.href.indexOf("Dipendente") > -1) {
