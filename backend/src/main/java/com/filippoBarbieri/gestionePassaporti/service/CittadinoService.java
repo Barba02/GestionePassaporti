@@ -51,7 +51,7 @@ public class CittadinoService {
     }
 
     public Cittadino login(String cf, String password) throws NoSuchElementException, IllegalArgumentException {
-        Cittadino c = getCittadino(cf);
+        Cittadino c = getCittadino(cf.toUpperCase());
         Password psw = new Password(password);
         psw.hashPassword();
         if (!psw.equals(c.getPassword()))

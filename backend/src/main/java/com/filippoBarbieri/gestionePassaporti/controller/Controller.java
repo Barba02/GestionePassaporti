@@ -1,17 +1,18 @@
 package com.filippoBarbieri.gestionePassaporti.controller;
 
 
-import com.filippoBarbieri.gestionePassaporti.service.CittadinoService;
-import com.filippoBarbieri.gestionePassaporti.service.DipendenteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.NoSuchElementException;
+import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
+import com.filippoBarbieri.gestionePassaporti.entity.Dipendente;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import com.filippoBarbieri.gestionePassaporti.service.CittadinoService;
+import com.filippoBarbieri.gestionePassaporti.service.DipendenteService;
 
 public abstract class Controller {
     @Autowired
@@ -38,10 +39,16 @@ public abstract class Controller {
         String key = cred[0];
         String psw = cred[1];
         try {
-            if (key.length() == 16)
-                return new ResponseEntity<>(cittadinoService.login(key, psw), HttpStatus.OK);
-            else if (key.length() == 6)
-                return new ResponseEntity<>(dipendenteService.login(key, psw), HttpStatus.OK);
+            if (key.length() == 16) {
+                Cittadino c = cittadinoService.login(key, psw);
+                c.getPassword().hide();
+                return new ResponseEntity<>(c, HttpStatus.OK);
+            }
+            else if (key.length() == 6) {
+                Dipendente d = dipendenteService.login(key, psw);
+                d.getPassword().hide();
+                return new ResponseEntity<>(d, HttpStatus.OK);
+            }
             else
                 return new ResponseEntity<>("Metodo non permesso", HttpStatus.FORBIDDEN);
         }

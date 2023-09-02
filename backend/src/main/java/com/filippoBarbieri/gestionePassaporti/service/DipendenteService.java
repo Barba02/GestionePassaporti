@@ -29,7 +29,7 @@ public class DipendenteService {
     }
 
     public Dipendente login(String username, String password) throws NoSuchElementException, IllegalArgumentException {
-        Dipendente d = getDipendente(username);
+        Dipendente d = getDipendente(username.toLowerCase());
         Password psw = new Password(password);
         psw.hashPassword();
         if (!psw.equals(d.getPassword()))
