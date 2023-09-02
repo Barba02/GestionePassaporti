@@ -1,16 +1,17 @@
 import axios from "axios";
+import Input from "./Input";
 import React, {useState} from "react";
 
 function LoginForm({ placeholder, length, link }) {
-	const [textValue, setTextValue] = useState("");
-	const [passValue, setPassValue] = useState("");
+	const [key, setKey] = useState("");
+	const [psw, setPsw] = useState("");
 	const url = "/gestionePassaporti/" + link + "/login";
 	function handleSubmit(event) {
 		event.preventDefault();
-		axios.post(url, [textValue, passValue])
+		axios.post(url, [key, psw])
 			.then(response => {
 				let field = (link === "cittadino") ? response.data.anagrafica.cf : response.data.username;
-				if (field.toLowerCase() === textValue.toLowerCase()) {
+				if (field.toLowerCase() === key.toLowerCase()) {
 					window.sessionStorage.setItem("userType", link);
 					window.sessionStorage.setItem("user", JSON.stringify(response.data));
 					window.location.href = "/areaPersonale";
@@ -22,14 +23,17 @@ function LoginForm({ placeholder, length, link }) {
 				alert(error.response.data.messaggio);
 			});
 	}
+	function handleChange(event, func) {
+		func(event.target.value);
+	}
 	return (
 		<form onSubmit={handleSubmit} className="loginForm">
-			<input type="text" value={textValue}
-				   onChange={(e) => setTextValue(e.target.value)}
-				   placeholder={placeholder} minLength={length} maxLength={length} required/>
-			<input type="password" value={passValue}
-				   onChange={(e) => setPassValue(e.target.value)}
-				   placeholder="Password" required/>
+			<Input type="text" value={key}
+				   required={true} placeholder={placeholder} length={length}
+				   onChange={(e) => handleChange(e, setKey)} />
+			<Input type="password" value={psw}
+				   required={true} placeholder="Password"
+				   onChange={(e) => handleChange(e, setPsw)} />
 			<button type="submit">ENTRA</button>
 		</form>
 	);

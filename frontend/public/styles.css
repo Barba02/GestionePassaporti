@@ -76,7 +76,7 @@ form.loginForm {
     justify-content: center;
 }
 
-form.loginForm input, form.loginForm button {
+form.loginForm input, form button {
     width: 320px;
     margin: 16px 0;
     font-size: 24px;
@@ -88,11 +88,11 @@ form.loginForm input, form.loginForm button {
 form.loginForm input:focus {
     border-color: var(--main-hover-color);
 }
-form.loginForm button {
+form button {
     color: white;
     background-color: var(--main-color);
 }
-form.loginForm button:hover {
+form button:hover {
     border-color: var(--main-hover-color);
     background-color: var(--main-hover-color);
 }
