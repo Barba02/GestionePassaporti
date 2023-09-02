@@ -1,15 +1,22 @@
 @import url('Kanit.css');
 
+:root {
+    --main-color: rebeccapurple;
+    --main-hover-color: slateblue;
+}
+
 * {
     outline: none;
     box-sizing: border-box;
     font-family: 'Kanit', sans-serif;
 }
+input, button {font-family: 'Kanit', sans-serif;}
+button {cursor: pointer;}
 
 html, body {
     margin: 0;
     height: 100%;
-    color: rebeccapurple;
+    color: var(--main-color);
     background-color: gainsboro;
 }
 
@@ -35,8 +42,8 @@ div.homeBox div.homeChoice > * {
     transition: .1s ease-in-out;
 }
 div.homeBox div.homeChoice > *.hover {
-    color: slateblue;
-    border-color: slateblue;
+    color: var(--main-hover-color);
+    border-color: var(--main-hover-color);
 }
 
 div.homeBox div.homeChoice i {
@@ -46,9 +53,9 @@ div.homeBox div.homeChoice i {
     font-size: 64px;
     border-radius: 64px;
     align-items: center;
-    color: rebeccapurple;
+    color: var(--main-color);
     justify-content: center;
-    border: 4px solid rebeccapurple;
+    border: 4px solid var(--main-color);
 }
 
 div.homeBox div.homeChoice p {
@@ -57,4 +64,35 @@ div.homeBox div.homeChoice p {
     margin: 16px 0 0;
     font-weight: 500;
     line-height: 1;
+}
+
+form.loginForm {
+    height: 100%;
+    display: flex;
+    margin: 0 auto;
+    width: fit-content;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+form.loginForm input, form.loginForm button {
+    width: 320px;
+    margin: 16px 0;
+    font-size: 24px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: .1s ease-in-out;
+    border: 2px solid var(--main-color);
+}
+form.loginForm input:focus {
+    border-color: var(--main-hover-color);
+}
+form.loginForm button {
+    color: white;
+    background-color: var(--main-color);
+}
+form.loginForm button:hover {
+    border-color: var(--main-hover-color);
+    background-color: var(--main-hover-color);
 }
