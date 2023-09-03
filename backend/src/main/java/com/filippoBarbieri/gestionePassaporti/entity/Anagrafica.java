@@ -3,17 +3,17 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 import java.net.URI;
 import java.time.LocalDate;
+
+import jakarta.persistence.*;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
-import jakarta.persistence.Id;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Column;
 import java.nio.charset.StandardCharsets;
 import jakarta.validation.constraints.NotNull;
+import com.filippoBarbieri.gestionePassaporti.enums.Sesso;
 
 @Entity
 public class Anagrafica {
@@ -34,17 +34,18 @@ public class Anagrafica {
     @Column(length = 2)
     private String provincia_nascita;
     @NotNull
-    private Boolean nato_maschio;
+    @Enumerated(EnumType.STRING)
+    private Sesso sesso;
 
     public Anagrafica() {}
 
-    public Anagrafica(String nome, String cognome, Boolean nato_maschio, String nazionalita, LocalDate data_nascita, String luogo_nascita, String provincia_nascita) {
+    public Anagrafica(String nome, String cognome, Sesso sesso, String nazionalita, LocalDate data_nascita, String luogo_nascita, String provincia_nascita) {
         this.nome = nome;
         this.cognome = cognome;
         this.nazionalita = nazionalita;
         this.data_nascita = data_nascita;
         this.luogo_nascita = luogo_nascita;
-        this.nato_maschio = nato_maschio;
+        this.sesso = sesso;
         this.provincia_nascita = provincia_nascita;
         try {
             cf = retrieveCf();
@@ -58,7 +59,7 @@ public class Anagrafica {
         String apiUrlWithParams = "https://api.miocodicefiscale.com/calculate" +
                 "?lname=" + URLEncoder.encode(cognome, StandardCharsets.UTF_8) +
                 "&fname=" + URLEncoder.encode(nome, StandardCharsets.UTF_8) +
-                "&gender=" + URLEncoder.encode((nato_maschio) ? "M" : "F", StandardCharsets.UTF_8) +
+                "&gender=" + URLEncoder.encode(String.valueOf(sesso), StandardCharsets.UTF_8) +
                 "&city=" + URLEncoder.encode(luogo_nascita, StandardCharsets.UTF_8) +
                 "&state=" + URLEncoder.encode(provincia_nascita, StandardCharsets.UTF_8) +
                 "&day=" + URLEncoder.encode(String.valueOf(data_nascita.getDayOfMonth()), StandardCharsets.UTF_8) +
@@ -120,12 +121,12 @@ public class Anagrafica {
         this.luogo_nascita = luogo_nascita;
     }
 
-    public Boolean getNato_maschio() {
-        return nato_maschio;
+    public Sesso getSesso() {
+        return sesso;
     }
 
-    public void setNato_maschio(Boolean male) {
-        this.nato_maschio = male;
+    public void setSesso(Sesso sesso) {
+        this.sesso = sesso;
     }
 
     public String getProvincia_nascita() {
