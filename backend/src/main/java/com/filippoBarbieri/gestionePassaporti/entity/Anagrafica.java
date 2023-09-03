@@ -2,12 +2,11 @@ package com.filippoBarbieri.gestionePassaporti.entity;
 
 
 import java.net.URI;
-import java.time.LocalDate;
-
-import jakarta.persistence.*;
 import org.json.JSONObject;
+import java.time.LocalDate;
 import java.io.IOException;
 import java.net.URLEncoder;
+import jakarta.persistence.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -39,10 +38,9 @@ public class Anagrafica {
 
     public Anagrafica() {}
 
-    public Anagrafica(String nome, String cognome, Sesso sesso, String nazionalita, LocalDate data_nascita, String luogo_nascita, String provincia_nascita) {
+    public Anagrafica(String nome, String cognome, Sesso sesso, LocalDate data_nascita, String luogo_nascita, String provincia_nascita) {
         this.nome = nome;
         this.cognome = cognome;
-        this.nazionalita = nazionalita;
         this.data_nascita = data_nascita;
         this.luogo_nascita = luogo_nascita;
         this.sesso = sesso;
