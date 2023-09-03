@@ -27,7 +27,7 @@ function LoginForm({ placeholder, length, link }) {
 		func(event.target.value);
 	}
 	return (
-		<form onSubmit={handleSubmit} className="loginForm">
+		<form onSubmit={handleSubmit}>
 			<Input type="text" value={key}
 				   required={true} placeholder={placeholder} length={length}
 				   onChange={(e) => handleChange(e, setKey)} />
@@ -40,6 +40,7 @@ function LoginForm({ placeholder, length, link }) {
 }
 
 function Login() {
+	document.getElementsByTagName("body")[0].style.height = "100%";
 	if (window.location.href.indexOf("Dipendente") > -1) {
 		if (window.sessionStorage.getItem('userType') !== "dipendente")
 			return <LoginForm placeholder="Username" length="6" link="dipendente"/>;

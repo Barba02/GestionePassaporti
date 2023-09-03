@@ -22,6 +22,7 @@ function QuadroHome({ link, icona, descrizione }) {
 	);
 }
 function Home() {
+	document.getElementsByTagName("body")[0].style.height = "100%";
 	return (
 		<div className="homeBox">
 			<QuadroHome link="/loginCittadino" icona="fa-solid fa-user" descrizione="Login<br/>Cittadino" />
