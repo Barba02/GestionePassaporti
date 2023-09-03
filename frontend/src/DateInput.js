@@ -1,32 +1,14 @@
 import React from "react";
 import Input from "./Input";
 
-function RadioElement({ chiave, onChange, name, required, check, val }) {
+function DateInput({ onChange, name, required, value }) {
 	return (
-		<>
-			<label htmlFor={chiave}>{val}</label>
-			<Input type="radio" name={name} id={chiave}
-				   value={val} required={required} checked={check}
-				   onChange={onChange} />
-		</>
+		<div className="dateInput">
+			<label htmlFor={name}>{name}</label>
+			<Input type="date" name={name} id={name}
+				   value={value} required={required} onChange={onChange} />
+		</div>
 	);
 }
 
-function RadioInput({ onChange, name, required, value, options }) {
-	return (
-		<>
-			<label>{name}</label>
-			{options.map((e, i) => (
-				<RadioElement key={i}
-							  val={e}
-							  name={name}
-							  chiave={name + i}
-							  check={value === e}
-							  required={required}
-							  onChange={onChange} />
-				))}
-		</>
-	);
-}
-
-export default RadioInput;
+export default DateInput;

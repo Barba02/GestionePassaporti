@@ -28,10 +28,10 @@ function LoginForm({ placeholder, length, link }) {
 	}
 	return (
 		<form onSubmit={handleSubmit}>
-			<Input type="text" value={key}
+			<Input type="text" value={key} classes="login"
 				   required={true} placeholder={placeholder} length={length}
 				   onChange={(e) => handleChange(e, setKey)} />
-			<Input type="password" value={psw}
+			<Input type="password" value={psw} classes="login"
 				   required={true} placeholder="Password"
 				   onChange={(e) => handleChange(e, setPsw)} />
 			<button type="submit">ENTRA</button>

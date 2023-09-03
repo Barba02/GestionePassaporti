@@ -3,29 +3,33 @@ import Input from "./Input";
 
 function RadioElement({ chiave, onChange, name, required, check, val }) {
 	return (
-		<>
-			<label htmlFor={chiave}>{val}</label>
+		<div>
 			<Input type="radio" name={name} id={chiave}
 				   value={val} required={required} checked={check}
 				   onChange={onChange} />
-		</>
+			<label htmlFor={chiave}>
+				<div>{val}</div>
+			</label>
+		</div>
 	);
 }
 
 function RadioInput({ onChange, name, required, value, options }) {
 	return (
-		<>
+		<div className="radioInput">
 			<label>{name}</label>
-			{options.map((e, i) => (
-				<RadioElement key={i}
-							  val={e}
-							  name={name}
-							  chiave={name + i}
-							  check={value === e}
-							  required={required}
-							  onChange={onChange} />
-				))}
-		</>
+			<div className="radioOptions">
+				{options.map((e, i) => (
+					<RadioElement key={i}
+								  val={e}
+								  name={name}
+								  chiave={name + i}
+								  check={value === e}
+								  required={required}
+								  onChange={onChange} />
+					))}
+			</div>
+		</div>
 	);
 }
 
