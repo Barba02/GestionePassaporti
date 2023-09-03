@@ -13,9 +13,9 @@
 input, button {font-family: 'Kanit', sans-serif;}
 button {cursor: pointer;}
 
-html, body {
+html {height: 100%;}
+body {
     margin: 0;
-    height: 100%;
     color: var(--main-color);
     background-color: gainsboro;
 }
@@ -66,7 +66,7 @@ div.homeBox div.homeChoice p {
     line-height: 1;
 }
 
-form.loginForm {
+form {
     height: 100%;
     display: flex;
     margin: 0 auto;
@@ -76,23 +76,91 @@ form.loginForm {
     justify-content: center;
 }
 
-form.loginForm input, form button {
-    width: 320px;
+form > div {
+    width: 100%;
+    display: flex;
     margin: 16px 0;
+}
+
+form input, form button {
+    width: 320px;
+    line-height: 1;
     font-size: 24px;
     padding: 4px 8px;
+    margin-right: 32px;
     border-radius: 8px;
     transition: .1s ease-in-out;
     border: 2px solid var(--main-color);
 }
-form.loginForm input:focus {
+input#prov {width: 70px;}
+input.numeroDoc {width: 148px;}
+input.login {margin: 16px 0;}
+form input:focus {
     border-color: var(--main-hover-color);
 }
 form button {
     color: white;
+    margin: 16px 0 0;
+    line-height: unset;
     background-color: var(--main-color);
 }
 form button:hover {
     border-color: var(--main-hover-color);
     background-color: var(--main-hover-color);
+}
+
+label {
+    line-height: 1;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 2px;
+}
+
+div.dateInput, div.radioInput {
+    display: flex;
+    width: fit-content;
+    margin-right: 32px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.dateInput input {
+    margin: 0;
+    width: 192px;
+    font-size: 14px;
+}
+
+div.radioInput, div.radioOptions {
+    display: flex;
+}
+
+input[type="radio"] {display: none;}
+div.radioInput label > div {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    margin-right: 8px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 2px solid var(--main-color);
+}
+div.radioInput div.radioOptions div:last-child label div {
+     margin-right: 0;
+}
+
+div.radioInput div.radioOptions div label {
+    position: relative;
+}
+div.radioInput div.radioOptions div input:checked + label div:after {
+    top: 0;
+    left: 0;
+    width: 30px;
+    color: black;
+    content: 'X';
+    line-height: 1;
+    font-size: 30px;
+    position: absolute;
+    text-align: center;
 }
