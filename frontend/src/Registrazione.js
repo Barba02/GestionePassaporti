@@ -14,15 +14,21 @@ function Registrazione() {
 	const [cognome, setCognome] = useState("");
 	let [passaporto, setPassaporto] = useState("");
 	let [diplomatico, setDiplomatico] = useState("");
+	let [figliMinori, setFigliMinori] = useState("");
 	const [dataNascita, setDataNascita] = useState("");
 	const [nazionalita, setNazionalita] = useState("");
-	let [figliMinori, setFigliMinori] = useState("");
 	const [luogoNascita, setLuogoNascita] = useState("");
 	const [provinciaNascita, setProvinciaNascita] = useState("");
 	const [scadenzaPassaporto, setScadenzaPassaporto] = useState("");
 	function handleSubmit(event) {
 		event.preventDefault();
-		let dataCF = {nome: nome, cognome: cognome, sesso: sesso, data_nascita: dataNascita, luogo_nascita: luogoNascita, provincia_nascita: provinciaNascita}
+		let dataCF = {
+			nome: nome,
+			cognome: cognome,
+			sesso: sesso,
+			data_nascita: dataNascita,
+			luogo_nascita: luogoNascita,
+			provincia_nascita: provinciaNascita}
 		axios.post("/gestionePassaporti/anagrafica/cf", dataCF)
 			.then(response => {
 				let cf = response.data;
@@ -31,7 +37,15 @@ function Registrazione() {
 					diplomatico = (diplomatico !== "No");
 					figliMinori = (figliMinori !== "No");
 					passaporto = (passaporto.length === 0) ? null : passaporto;
-					let data = {anagrafica: {cf: cf}, email: email, diplomatico: diplomatico, figli_minori: figliMinori, password: {password: psw}, cie: cie.toUpperCase(), passaporto: passaporto, scadenza_passaporto: scadenzaPassaporto};
+					let data = {
+						anagrafica: {cf: cf},
+						email: email.toLowerCase(),
+						diplomatico: diplomatico,
+						figli_minori: figliMinori,
+						password: {password: psw},
+						cie: cie.toUpperCase(),
+						passaporto: passaporto.toUpperCase(),
+						scadenza_passaporto: scadenzaPassaporto};
 					axios.post("/gestionePassaporti/cittadino/registra", data)
 						.then(response => {
 							alert("Registrazione completata");
