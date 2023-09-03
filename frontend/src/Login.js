@@ -2,19 +2,19 @@ import axios from "axios";
 import Input from "./Input";
 import React, {useState} from "react";
 
-function LoginForm({ placeholder, length, link }) {
+function LoginForm({ placeholder, length, userType }) {
 	const [key, setKey] = useState("");
 	const [psw, setPsw] = useState("");
-	const url = "/gestionePassaporti/" + link + "/login";
+	const url = "/gestionePassaporti/" + userType.toLowerCase() + "/login";
 	function handleSubmit(event) {
 		event.preventDefault();
 		axios.post(url, [key, psw])
 			.then(response => {
-				let field = (link === "cittadino") ? response.data.anagrafica.cf : response.data.username;
+				let field = (userType === "Cittadino") ? response.data.anagrafica.cf : response.data.username;
 				if (field.toLowerCase() === key.toLowerCase()) {
-					window.sessionStorage.setItem("userType", link);
+					window.sessionStorage.setItem("userType", userType);
 					window.sessionStorage.setItem("user", JSON.stringify(response.data));
-					window.location.href = "/areaPersonale";
+					window.location.href = "/area" + userType;
 				}
 				else
 					alert("Si è verificato un errore");
@@ -41,15 +41,14 @@ function LoginForm({ placeholder, length, link }) {
 
 function Login() {
 	document.getElementsByTagName("body")[0].style.height = "100%";
-	if (window.location.href.indexOf("Dipendente") > -1) {
-		if (window.sessionStorage.getItem('userType') !== "dipendente")
-			return <LoginForm placeholder="Username" length="6" link="dipendente"/>;
-		window.location.href = "/areaPersonale";
-	}
+	let url = window.location.href;
+	let userType = window.sessionStorage.getItem("userType");
+	if (window.sessionStorage.getItem("user") && url.indexOf(userType) > -1)
+		window.location.href = "/area" + userType;
 	else {
-		if (window.sessionStorage.getItem('userType') !== "cittadino")
-			return <LoginForm placeholder="Codice fiscale" length="16" link="cittadino"/>;
-		window.location.href = "/areaPersonale";
+		if (url.indexOf("Dipendente") > -1)
+			return <LoginForm placeholder="Username" length="6" userType="Dipendente"/>;
+		return <LoginForm placeholder="Codice fiscale" length="16" userType="Cittadino"/>;
 	}
 }
 
