@@ -184,9 +184,13 @@ nav p:first-child:hover {
     color: var(--main-hover-color)
 }
 
-h1 {
+#root > h1 {
     text-align: center;
-    margin: 48px 0 32px;
+    margin: 48px 0 0;
+}
+#root > h2 {
+    text-align: center;
+    margin: 0 0 32px;
 }
 
 table {
@@ -241,3 +245,32 @@ div.legenda div:last-child:before, table td.CHIUSO {background-color: red;}
 div.legenda div:nth-child(2):before, table td.LIBERO {background-color: green;}
 div.legenda div:nth-child(3):before, table td.OCCUPATO {background-color: orange;}
 div.legenda div:first-child:before, table td.NON_GESTITO {background-color: dimgray;}
+
+.ReactModal__Content.ReactModal__Content--after-open {
+    width: 32%;
+    height: 32%;
+    margin: auto;
+    display: flex;
+    line-height: 1;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.ReactModal__Content.ReactModal__Content--after-open > * {
+    width: fit-content;
+    margin: 0 auto;
+}
+.ReactModal__Content.ReactModal__Content--after-open button.chiusura {
+    top: 8px;
+    right: 8px;
+    color: white;
+    font-weight: bold;
+    position: absolute;
+    border: 1.5px solid black;
+    background-color: #E70808FF;
+    transition: .1s ease-in-out;
+}
+.ReactModal__Content.ReactModal__Content--after-open button.chiusura:hover {
+    background-color: #E70808BB;
+}
+

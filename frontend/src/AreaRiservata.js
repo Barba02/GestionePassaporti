@@ -38,11 +38,13 @@ function SwitchAzioni({ slot, closer }) {
 	}
 	switch(slot.stato) {
 		case "NON_GESTITO":
-			return (<>
-				<button onClick={() => modificaStato("LIBERO")}>Apri slot</button>
-				<span> </span>
-				<button onClick={() => modificaStato("CHIUSO")}>Chiudi slot</button>
-			</>);
+			return (
+				<div>
+					<button onClick={() => modificaStato("LIBERO")}>Apri slot</button>
+					<span> </span>
+					<button onClick={() => modificaStato("CHIUSO")}>Chiudi slot</button>
+				</div>
+			);
 		case "LIBERO":
 			return <button onClick={() => modificaStato("CHIUSO")}>Chiudi slot</button>
 		default:
@@ -65,8 +67,8 @@ function CasellaSlot({ slot }) {
 			<Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
 				<h1>Gestisci slot</h1>
 				<h2>{formatDate(new Date(dt.slice(0, 10)))} {dt.slice(11).replace('-', ':')}</h2>
-				<SwitchAzioni slot={slot} closer={closeModal} /><br/><br/>
-				<button onClick={closeModal}>Chiudi</button>
+				<SwitchAzioni slot={slot} closer={closeModal} />
+				<button className="chiusura" onClick={closeModal}>X</button>
 			</Modal>
 			<td className={slot.stato} onClick={openModal}></td>
 		</>
@@ -153,6 +155,13 @@ function TabellaSlot({ list }) {
 	);
 }
 
+function capitalize(str) {
+	const capitalizedWords = str.split("_").map((word) => {
+		if (!word.trim()) return word;
+		return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+	});
+	return capitalizedWords.join(" ");
+}
 async function fetchDataAndSetList() {
 	await axios.get("/gestionePassaporti/dipendente/" + user.username + "/slots")
 		.then(response => {
@@ -175,9 +184,9 @@ function AreaDipendente() {
 	return (
 		<>
 			<h1>I tuoi slot</h1>
+			<h2>{capitalize(user.sede)}</h2>
 			{list ? <TabellaSlot list={list} /> : null}
 			<div className="legenda">
-				{/* eslint-disable-next-line react/style-prop-object */}
 				<div>Non gestito</div>
 				<div>Aperto</div>
 				<div>Occupato</div>
