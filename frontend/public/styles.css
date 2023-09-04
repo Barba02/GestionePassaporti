@@ -184,11 +184,16 @@ nav p:first-child:hover {
     color: var(--main-hover-color)
 }
 
+h1 {
+    text-align: center;
+    margin: 48px 0 32px;
+}
+
 table {
     display: block;
     margin: auto;
-    padding: 32px 0;
     width: fit-content;
+    margin-bottom: 32px;
     border-collapse: collapse;
 }
 table th, table td {
@@ -198,10 +203,6 @@ table th, table td {
     border: 2px solid var(--main-color);
 }
 table td.CHIUSO, table td.LIBERO, table td.OCCUPATO, table td.NON_GESTITO {cursor: pointer;}
-table td.CHIUSO {background-color: red;}
-table td.LIBERO {background-color: green;}
-table td.OCCUPATO {background-color: orange;}
-table td.NON_GESTITO {background-color: dimgray;}
 
 table thead tr th i {
     margin: 0 8px;
@@ -217,3 +218,26 @@ table thead tr th i:hover {
     color: var(--main-hover-color);
     border-color: var(--main-hover-color);
 }
+
+div.legenda {
+    display: flex;
+    margin: 0 auto;
+    width: fit-content;
+}
+div.legenda div {
+    display: flex;
+    margin: 0 16px 48px;
+    align-items: center;
+}
+div.legenda div:before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    display: block;
+    margin-right: 2px;
+}
+
+div.legenda div:last-child:before, table td.CHIUSO {background-color: red;}
+div.legenda div:nth-child(2):before, table td.LIBERO {background-color: green;}
+div.legenda div:nth-child(3):before, table td.OCCUPATO {background-color: orange;}
+div.legenda div:first-child:before, table td.NON_GESTITO {background-color: dimgray;}

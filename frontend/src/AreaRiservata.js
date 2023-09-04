@@ -89,6 +89,14 @@ function getDatesOfWeek(day) {
 	}
 	return dates;
 }
+function sort(dict) {
+	const chiavi = Object.keys(dict);
+	chiavi.sort();
+	const dizionarioOrdinato = {};
+	for (const chiave of chiavi)
+		dizionarioOrdinato[chiave] = dict[chiave];
+	return dizionarioOrdinato;
+}
 function TabellaSlot({ list }) {
 	const [week, setWeek] = useState(getDatesOfWeek(new Date()));
 	function prevWeek() {
@@ -101,7 +109,7 @@ function TabellaSlot({ list }) {
 		actual.setDate(actual.getDate() + 7);
 		setWeek(getDatesOfWeek(actual));
 	}
-	const weekListByTime = {};
+	let weekListByTime = {};
 	list.filter(item => {
 		const itemDate = new Date(item.datetime.slice(0, 10));
 		itemDate.setHours(0, 0, 0, 0);
@@ -114,6 +122,7 @@ function TabellaSlot({ list }) {
 		const index = new Date(item.datetime.slice(0, 10)).getDay() - 1;
 		weekListByTime[key][index] = (item);
 	});
+	weekListByTime = sort(weekListByTime);
 	const times = Object.keys(weekListByTime);
 	return (
 		<table>
@@ -163,7 +172,19 @@ function AreaDipendente() {
 			fetchDataAndSetList();
 		}, 20000);
 	}, []);
-	return list ? <TabellaSlot list={list} /> : null;
+	return (
+		<>
+			<h1>I tuoi slot</h1>
+			{list ? <TabellaSlot list={list} /> : null}
+			<div className="legenda">
+				{/* eslint-disable-next-line react/style-prop-object */}
+				<div>Non gestito</div>
+				<div>Aperto</div>
+				<div>Occupato</div>
+				<div>Chiuso</div>
+			</div>
+		</>
+	);
 }
 
 function AreaCittadino() {
