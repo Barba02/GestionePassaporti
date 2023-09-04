@@ -2,8 +2,11 @@ package com.filippoBarbieri.gestionePassaporti.service;
 
 
 import java.util.*;
+
+import com.filippoBarbieri.gestionePassaporti.enums.Stato;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
+import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
@@ -23,6 +26,8 @@ public class CittadinoService {
     private CittadinoRepository cittadinoRepo;
     @Autowired
     private AnagraficaRepository anagraficaRepo;
+    @Autowired
+    private SlotService slotService;
 
     public void registraCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException, IllegalArgumentException {
         if (!anagraficaRepo.existsById(c.getAnagrafica().getCf()))
@@ -61,5 +66,19 @@ public class CittadinoService {
 
     public List<Slot> getSlots(String cf) throws NoSuchElementException {
         return slotRepo.findAllByCittadino(getCittadino(cf));
+    }
+
+    public Slot riservaSlot(Long id, String cf, Tipo tipo) throws IllegalAccessException, IllegalStateException {
+        Slot s = slotService.getSlot(id);
+        Cittadino c = getCittadino(cf);
+        if (tipo.equals(Tipo.RITIRO)) {
+           Slot last = slotRepo.findFirstByOrderByDatetimeDesc();
+           if (!last.getStato().equals(Stato.CHIUSO) || last.getTipo().equals(Tipo.RITIRO))
+               throw new IllegalStateException("Non è possibile prenotare un ritiro se la precedente richiesta di rilascio o rinnovo non è stata chiusa");
+        }
+        s.setTipo(tipo);
+        s.setCittadino(c);
+        s.setStato(Stato.OCCUPATO);
+        return slotService.modificaSlot(id, s).getObj();
     }
 }

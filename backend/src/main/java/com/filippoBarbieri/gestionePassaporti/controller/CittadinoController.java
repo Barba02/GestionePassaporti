@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.dao.DuplicateKeyException;
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
@@ -48,6 +49,17 @@ public class CittadinoController extends Controller {
         catch(NoSuchElementException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
                     HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping(path = "/{cf}/riserva", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
+    public ResponseEntity<Object> riservaSlot(@PathVariable String cf, @RequestBody Slot s) {
+        try {
+            return new ResponseEntity<>(service.riservaSlot(s.getId(), cf, s.getTipo()), HttpStatus.OK);
+        }
+        catch(IllegalStateException | IllegalAccessException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
         }
     }
 
