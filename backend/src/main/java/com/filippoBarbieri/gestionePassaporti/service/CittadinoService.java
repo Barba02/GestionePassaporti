@@ -1,14 +1,12 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
-import java.time.LocalDate;
 import java.util.*;
-
-import com.filippoBarbieri.gestionePassaporti.enums.Stato;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
+import com.filippoBarbieri.gestionePassaporti.enums.Stato;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import com.filippoBarbieri.gestionePassaporti.entity.Password;

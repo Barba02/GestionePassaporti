@@ -1,8 +1,8 @@
+import axios from "axios";
 import Input from "./Input";
 import React, {useState} from "react";
 import RadioInput from "./RadioInput";
 import DateInput from "./DateInput";
-import axios from "axios";
 
 function Registrazione() {
 	document.getElementsByTagName("body")[0].style.height = "100%";
@@ -44,7 +44,7 @@ function Registrazione() {
 						figli_minori: figliMinori,
 						password: {password: psw},
 						cie: cie.toUpperCase(),
-						passaporto: passaporto.toUpperCase(),
+						passaporto: passaporto ? passaporto.toUpperCase() : null,
 						scadenza_passaporto: scadenzaPassaporto};
 					axios.post("/gestionePassaporti/cittadino/registra", data)
 						.then(response => {
@@ -52,13 +52,15 @@ function Registrazione() {
 							window.location.href = "/loginCittadino";
 						})
 						.catch(error => {
-							alert(error.response.data.messaggio);
+							console.log(error);
+							alert(error.response.data.messaggio + "\nContattare assistenza@passaporti.it per eventuali chiarimenti");
 						});
 				}
 				else
 					alert("Ricontrolla i tuoi dati");
 			})
 			.catch(error => {
+				console.log(error);
 				alert(error.response.data.messaggio);
 			});
 	}
