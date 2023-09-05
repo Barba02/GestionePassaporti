@@ -109,6 +109,10 @@ public class SlotService {
         return mod;
     }
 
+    public Sede[] getListaSedi() {
+        return Sede.values();
+    }
+
     private static final LocalTime[] slotTimes = {
             LocalTime.of(8, 0), LocalTime.of(8, 30),
             LocalTime.of(9, 0), LocalTime.of(9, 30),

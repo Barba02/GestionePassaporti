@@ -31,6 +31,11 @@ public class SlotController extends Controller {
         }
     }
 
+    @GetMapping(path = "/sedi", produces = {"application/json", "application/xml"})
+    public ResponseEntity<Object> getMapping() {
+        return new ResponseEntity<>(service.getListaSedi(), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/{obj}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getMapping(@PathVariable String obj,
                                              @RequestParam(required = false) LocalDateTime from,
