@@ -55,7 +55,7 @@ public class CittadinoController extends Controller {
     @PutMapping(path = "/{cf}/riserva", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
     public ResponseEntity<Object> riservaSlot(@PathVariable String cf, @RequestBody Slot s) {
         try {
-            return new ResponseEntity<>(service.riservaSlot(s.getId(), cf, s.getTipo()), HttpStatus.OK);
+            return new ResponseEntity<>(service.riservaSlot(s.getId(), cf), HttpStatus.OK);
         }
         catch(IllegalStateException | IllegalAccessException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
