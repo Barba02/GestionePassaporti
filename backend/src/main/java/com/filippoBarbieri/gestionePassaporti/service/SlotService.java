@@ -90,14 +90,21 @@ public class SlotService {
     }
 
     public ModificaDTO<Slot> modificaSlot(Long id, Slot s) throws NoSuchElementException, IllegalAccessException, IllegalArgumentException {
-        if (s.getCittadino() == null)
+        boolean sentinella = false;
+        if (s.getCittadino() != null && s.getCittadino().getAnagrafica() == null) {
+            sentinella = true;
             s.setCittadino(null);
-        else
-            s.setCittadino(cittadinoRepo.findByAnagrafica_Cf(
-                            s.getCittadino().getAnagrafica().getCf())
-                    .orElse(null));
+        }
+        else {
+            if (s.getCittadino() != null)
+                s.setCittadino(cittadinoRepo.findByAnagrafica_Cf(
+                                s.getCittadino().getAnagrafica().getCf())
+                        .orElse(null));
+        }
         ModificaDTO<Slot> mod = new ModificaDTO<>(getSlot(id));
         mod.modifica(List.of(new String[]{"tipo", "stato", "cittadino", "dipendente"}), s);
+        if (sentinella)
+            mod.getObj().setCittadino(null);
         slotRepo.save(mod.getObj());
         return mod;
     }

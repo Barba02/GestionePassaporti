@@ -71,7 +71,6 @@ public class CittadinoService {
         Slot s = slotService.getSlot(id);
         Tipo tipo = s.getTipo();
         Cittadino c = getCittadino(cf);
-        System.out.println(c.getPassword().getPassword());
         List<Slot> listaOrdinata = slotRepo.findByCittadinoOrderByDatetimeDesc(c);
         Slot last = (listaOrdinata.isEmpty()) ? null : listaOrdinata.get(0);
         if (!s.getStato().equals(Stato.LIBERO))
