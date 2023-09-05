@@ -1,6 +1,7 @@
 package com.filippoBarbieri.gestionePassaporti.controller;
 
 
+import java.util.List;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
+import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.service.SlotService;
 
@@ -44,7 +46,10 @@ public class SlotController extends Controller {
     }
     public ResponseEntity<Object> getSlot(Long id) {
         try {
-            return new ResponseEntity<>(service.getSlot(id), HttpStatus.OK);
+            Slot s = service.getSlot(id);
+            if (s.getCittadino() != null)
+                s.getCittadino().getPassword().hide();
+            return new ResponseEntity<>(s, HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
@@ -53,7 +58,9 @@ public class SlotController extends Controller {
     }
     public ResponseEntity<Object> getSlots(String sede, String stato, LocalDateTime from, LocalDateTime to) {
         try {
-            return new ResponseEntity<>(service.getSlots(sede, stato, from, to), HttpStatus.OK);
+            List<Slot> l = service.getSlots(sede, stato, from, to);
+            l.stream().filter(s -> s.getCittadino() != null).forEach(s -> s.getCittadino().getPassword().hide());
+            return new ResponseEntity<>(l, HttpStatus.OK);
         }
         catch(IllegalArgumentException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
@@ -74,9 +81,12 @@ public class SlotController extends Controller {
     }
 
     @PutMapping(path = "/{id}", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
-    public ResponseEntity<Object> modificaSlot(@PathVariable Long id, @RequestBody Slot s) {
+    public ResponseEntity<Object> modificaSlot(@PathVariable Long id, @RequestBody Slot slot) {
         try {
-            return new ResponseEntity<>(service.modificaSlot(id, s), HttpStatus.OK);
+            ModificaDTO<Slot> s = service.modificaSlot(id, slot);
+            if (s.getObj().getCittadino() != null)
+                s.getObj().getCittadino().getPassword().hide();
+            return new ResponseEntity<>(s, HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),

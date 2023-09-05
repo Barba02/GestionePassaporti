@@ -1,6 +1,7 @@
 package com.filippoBarbieri.gestionePassaporti.controller;
 
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,9 +54,11 @@ public class CittadinoController extends Controller {
     }
 
     @PutMapping(path = "/{cf}/riserva", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
-    public ResponseEntity<Object> riservaSlot(@PathVariable String cf, @RequestBody Slot s) {
+    public ResponseEntity<Object> riservaSlot(@PathVariable String cf, @RequestBody Long id) {
         try {
-            return new ResponseEntity<>(service.riservaSlot(s.getId(), cf), HttpStatus.OK);
+            Slot s = service.riservaSlot(id, cf);
+            s.getCittadino().getPassword().hide();
+            return new ResponseEntity<>(s, HttpStatus.OK);
         }
         catch(IllegalStateException | IllegalAccessException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
@@ -66,7 +69,9 @@ public class CittadinoController extends Controller {
     @GetMapping(path = "/{cf}/slots", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getSlots(@PathVariable String cf) {
         try {
-            return new ResponseEntity<>(service.getSlots(cf), HttpStatus.OK);
+            List<Slot> l = service.getSlots(cf);
+            l.forEach(s -> s.getCittadino().getPassword().hide());
+            return new ResponseEntity<>(l, HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),

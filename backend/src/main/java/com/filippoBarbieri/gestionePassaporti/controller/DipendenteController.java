@@ -1,10 +1,12 @@
 package com.filippoBarbieri.gestionePassaporti.controller;
 
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import com.filippoBarbieri.gestionePassaporti.dto.ErroreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
@@ -20,7 +22,9 @@ public class DipendenteController extends Controller {
     @GetMapping(path = "/{username}/slots", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getSlots(@PathVariable String username) {
         try {
-            return new ResponseEntity<>(service.getSlots(username), HttpStatus.OK);
+            List<Slot> l = service.getSlots(username);
+            l.stream().filter(s -> s.getCittadino() != null).forEach(s -> s.getCittadino().getPassword().hide());
+            return new ResponseEntity<>(l, HttpStatus.OK);
         }
         catch(NoSuchElementException e) {
             return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),

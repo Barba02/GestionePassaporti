@@ -76,8 +76,6 @@ public class Slot {
     }
 
     public Cittadino getCittadino() {
-        if (cittadino != null && cittadino.getPassword() != null)
-            cittadino.getPassword().hide();
         return cittadino;
     }
 
