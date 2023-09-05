@@ -1,11 +1,12 @@
 import axios from "axios";
 import Modal from 'react-modal';
-import React, {useEffect, useState} from "react";
+import Utilities from "./utilities";
 import RadioInput from "./RadioInput";
+import React, {useEffect, useState} from "react";
 
 let user;
-let setter;
 let userType;
+let listaDipSetter;
 let appuntamentiSetter;
 
 function BarraPersonale() {
@@ -30,7 +31,7 @@ function SwitchAzioni({ slot, closer }) {
 	function modificaStato(stato, tipo=null) {
 		axios.put("/gestionePassaporti/slot/" + slot.id, {stato: stato, tipo:tipo})
 			.then(response => {
-				fetchDataAndSetList();
+				Utilities.axiosGetter("/gestionePassaporti/dipendente/" + user.username + "/slots", listaDipSetter);
 				closer();
 			})
 			.catch(error => {
@@ -67,12 +68,11 @@ function CasellaSlot({ slot }) {
 	const closeModal = () => {setModalIsOpen(false);}
 	if (!slot)
 		return <td></td>;
-	const dt = slot.datetime;
 	return (
 		<>
 			<Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
 				<h1>Gestisci slot</h1>
-				<h2>{formatDate(new Date(dt.slice(0, 10)))} {dt.slice(11).replace('-', ':')}</h2>
+				<h2>{Utilities.formatDate(new Date(Utilities.getDay(slot.datetime)))} {Utilities.getHour(slot.datetime)}</h2>
 				<SwitchAzioni slot={slot} closer={closeModal} />
 				<button className="chiusura" onClick={closeModal}>X</button>
 			</Modal>
@@ -81,59 +81,32 @@ function CasellaSlot({ slot }) {
 	);
 }
 
-function formatDate(date) {
-	const day = String(date.getDate()).padStart(2, '0');
-	const month = String(date.getMonth() + 1).padStart(2, '0'); // Mese è basato su zero, quindi aggiungi 1
-	const year = date.getFullYear();
-	return `${day}/${month}/${year}`;
-}
-function getDatesOfWeek(day) {
-	day.setHours(0, 0, 0, 0);
-	const g = day.getDay();
-	if (g !== 1)
-		day.setDate(day.getDate() - ((g === 0) ? 6 : g - 1));
-	const dates = [];
-	for (let i = 1; i <= 5; i++) {
-		const date = new Date(day);
-		date.setDate(day.getDate() + i - 1);
-		dates.push(date);
-	}
-	return dates;
-}
-function sort(dict) {
-	const chiavi = Object.keys(dict);
-	chiavi.sort();
-	const dizionarioOrdinato = {};
-	for (const chiave of chiavi)
-		dizionarioOrdinato[chiave] = dict[chiave];
-	return dizionarioOrdinato;
-}
 function TabellaSlot({ list }) {
-	const [week, setWeek] = useState(getDatesOfWeek(new Date()));
+	const [week, setWeek] = useState(Utilities.getDatesOfWeek(new Date()));
 	function prevWeek() {
 		const actual = new Date(week[0]);
 		actual.setDate(actual.getDate() - 7);
-		setWeek(getDatesOfWeek(actual));
+		setWeek(Utilities.getDatesOfWeek(actual));
 	}
 	function nextWeek() {
 		const actual = new Date(week[0]);
 		actual.setDate(actual.getDate() + 7);
-		setWeek(getDatesOfWeek(actual));
+		setWeek(Utilities.getDatesOfWeek(actual));
 	}
 	let weekListByTime = {};
 	list.filter(item => {
-		const itemDate = new Date(item.datetime.slice(0, 10));
+		const itemDate = new Date(Utilities.getDay(item.datetime));
 		itemDate.setHours(0, 0, 0, 0);
 		return itemDate >= week[0] && itemDate <= week[4];
 	})
 	.forEach(item => {
-		const key = item.datetime.slice(11);
+		const key = Utilities.getHour(item.datetime);
 		if (!weekListByTime[key])
 			weekListByTime[key] = new Array(5).fill(null);
-		const index = new Date(item.datetime.slice(0, 10)).getDay() - 1;
+		const index = new Date(Utilities.getDay(item.datetime)).getDay() - 1;
 		weekListByTime[key][index] = item;
 	});
-	weekListByTime = sort(weekListByTime);
+	weekListByTime = Utilities.sort(weekListByTime);
 	const times = Object.keys(weekListByTime);
 	return (
 		<table>
@@ -143,11 +116,11 @@ function TabellaSlot({ list }) {
 						<i className="fa-solid fa-arrow-left" onClick={prevWeek}></i>
 						<i className="fa-solid fa-arrow-right" onClick={nextWeek}></i>
 					</th>
-					<th>Lunedì<br/>{formatDate(week[0])}</th>
-					<th>Martedì<br/>{formatDate(week[1])}</th>
-					<th>Mercoledì<br/>{formatDate(week[2])}</th>
-					<th>Giovedì<br/>{formatDate(week[3])}</th>
-					<th>Venerdì<br/>{formatDate(week[4])}</th>
+					<th>Lunedì<br/>{Utilities.formatDate(week[0])}</th>
+					<th>Martedì<br/>{Utilities.formatDate(week[1])}</th>
+					<th>Mercoledì<br/>{Utilities.formatDate(week[2])}</th>
+					<th>Giovedì<br/>{Utilities.formatDate(week[3])}</th>
+					<th>Venerdì<br/>{Utilities.formatDate(week[4])}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -164,36 +137,19 @@ function TabellaSlot({ list }) {
 	);
 }
 
-function capitalize(str) {
-	const capitalizedWords = str.split("_").map((word) => {
-		if (!word.trim()) return word;
-		return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-	});
-	return capitalizedWords.join(" ");
-}
-async function fetchDataAndSetList() {
-	await axios.get("/gestionePassaporti/dipendente/" + user.username + "/slots")
-		.then(response => {
-			setter(response.data);
-		})
-		.catch(error => {
-			alert(error.response.data.messaggio);
-			setter(null);
-		});
-}
 function AreaDipendente() {
 	const [list, setList] = useState(null);
-	setter = setList;
+	listaDipSetter = setList;
 	useEffect(() => {
-		fetchDataAndSetList();
+		Utilities.axiosGetter("/gestionePassaporti/dipendente/" + user.username + "/slots", setList);
 		setInterval(() => {
-			fetchDataAndSetList();
+			Utilities.axiosGetter("/gestionePassaporti/dipendente/" + user.username + "/slots", setList);
 		}, 20000);
 	}, []);
 	return (
 		<>
 			<h1>I tuoi slot</h1>
-			<h2>{capitalize(user.sede)}</h2>
+			<h2>{Utilities.capitalize(user.sede)}</h2>
 			{list ? <TabellaSlot list={list} /> : null}
 			<div className="legenda">
 				<div>Non gestito</div>
@@ -211,36 +167,28 @@ function Appuntamento({ slot }) {
 		if (slot.stato === "OCCUPATO" && confirm("Vuoi disdire l'appuntamento?"))
 			axios.put("/gestionePassaporti/slot/" + slot.id, {cittadino: {}, stato: "LIBERO"})
 				.then(response => {
-					getAppuntamenti();
+					Utilities.axiosGetter("/gestionePassaporti/cittadino/" + user.anagrafica.cf + "/slots", appuntamentiSetter);
 				})
 				.catch(error => {
 					alert(error.response.data.messaggio);
 				});
 	}
 	return (
-		<div>
-			{slot.datetime}
-			{slot.tipo}
-			{slot.stato}
-			{slot.stato === "OCCUPATO" ? <button onClick={disdici}>Disdici</button> : null}
+		<div className="appuntamento">
+			<p>{Utilities.formatDate(new Date(Utilities.getDay(slot.datetime)))} {Utilities.getHour(slot.datetime)}</p>
+			<p>{Utilities.capitalize(slot.sede)}</p>
+			<p>{slot.tipo}</p>
+			<p>{slot.stato}</p>
+			{slot.stato === "OCCUPATO" ? <button onClick={disdici}>DISDICI</button> : null}
 		</div>
 	);
 }
-async function getAppuntamenti() {
-	await axios.get("/gestionePassaporti/cittadino/" + user.anagrafica.cf + "/slots")
-		.then(response => {
-			appuntamentiSetter(response.data);
-		})
-		.catch(error => {
-			alert(error.response.data.messaggio);
-			appuntamentiSetter(null);
-		});
-}
+
 function ListaAppuntamenti() {
 	const [app, setApp] = useState(null);
 	appuntamentiSetter = setApp;
 	useEffect(() => {
-		getAppuntamenti();
+		Utilities.axiosGetter("/gestionePassaporti/cittadino/" + user.anagrafica.cf + "/slots", setApp);
 	}, []);
 	return app ? (
 		app.map((e, i) => (
@@ -249,32 +197,22 @@ function ListaAppuntamenti() {
 	) : null;
 }
 
-async function getTipo(set) {
-	await axios.get("/gestionePassaporti/cittadino/" + user.anagrafica.cf + "/slots")
-		.then(response => {
-			if (response.data[response.data.length - 1].tipo === "RITIRO")
-				set("RINNOVO");
-			else
-				set("RITIRO");
-		})
-		.catch(error => {
-			alert(error.response.data.messaggio);
-		});
-}
 function AreaCittadino() {
 	const [tipo, setTipo] = useState(null);
 	const [sede, setSede] = useState(null);
-	function handleChange(event, func) {
-		func(event.target.value);
-	}
+	const [listaSedi, setListaSedi] = useState([]);
 	useEffect(() => {
 		if (!user.passaporto)
 			setTipo("RILASCIO");
-		else
-			getTipo(setTipo);
+		else {
+			Utilities.axiosGetter("/gestionePassaporti/cittadino/" + user.anagrafica.cf + "/slots", setTipo);
+		}
 	}, []);
-	function getSedi() {
-		return [" f", " f"];
+	useEffect(() => {
+		Utilities.axiosGetter("/gestionePassaporti/slot/sedi", setListaSedi);
+	}, []);
+	function handleChange(event, func) {
+		func(event.target.value);
 	}
 	return (
 		<>
@@ -282,11 +220,11 @@ function AreaCittadino() {
 			<ListaAppuntamenti />
 			<h1>Notifiche</h1>
 			<h1>Nuovo appuntamento</h1>
-			<div>
-				<p>{tipo}</p>
-				<RadioInput onChange={(e) => handleChange(e, setSede())}
+			<div className="sedeRadio">
+				<p>{tipo ? (tipo[tipo.length-1].tipo === "RITIRO" ? "RINNOVO" : "RITIRO") : null}</p>
+				<RadioInput onChange={(e) => handleChange(e, setSede)}
 							name="Sede" required={true}
-							value={sede} options={getSedi()} />
+							value={sede} options={listaSedi ? listaSedi : []} />
 			</div>
 		</>
 	);

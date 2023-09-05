@@ -1,5 +1,6 @@
 import React from "react";
 import Input from "./Input";
+import Utilities from "./utilities";
 
 function RadioElement({ chiave, onChange, name, required, check, val }) {
 	return (
@@ -8,7 +9,7 @@ function RadioElement({ chiave, onChange, name, required, check, val }) {
 				   value={val} required={required} checked={check}
 				   onChange={onChange} />
 			<label htmlFor={chiave}>
-				<div>{val}</div>
+				<div>{Utilities.capitalize(val)}</div>
 			</label>
 		</div>
 	);

@@ -274,3 +274,35 @@ div.legenda div:first-child:before, table td.NON_GESTITO {background-color: dimg
     background-color: #E70808BB;
 }
 
+div.appuntamento {
+    width: 566px;
+    display: flex;
+    padding: 16px 8px;
+    align-items: center;
+    margin: 16px auto 0;
+    flex-direction: row;
+    background-color: white;
+    justify-content: space-evenly;
+    border: 2px solid var(--main-color);
+}
+
+div.appuntamento p {
+    margin: 0;
+    font-weight: 500;
+}
+
+div.appuntamento button {
+    color: white;
+    cursor: pointer;
+    border: 1px solid black;
+    transition: .1s ease-in-out;
+    background-color: var(--main-color);
+}
+div.appuntamento button:hover {
+    background-color: var(--main-hover-color);
+}
+
+div.sedeRadio label > div {
+    width: unset;
+    padding: 4px 8px;
+}
