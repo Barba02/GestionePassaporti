@@ -71,11 +71,15 @@ public class CittadinoService {
     public Slot riservaSlot(Long id, String cf, Tipo tipo) throws IllegalAccessException, IllegalStateException {
         Slot s = slotService.getSlot(id);
         Cittadino c = getCittadino(cf);
-        if (tipo.equals(Tipo.RITIRO)) {
-           Slot last = slotRepo.findFirstByOrderByDatetimeDesc();
-           if (!last.getStato().equals(Stato.CHIUSO) || last.getTipo().equals(Tipo.RITIRO))
-               throw new IllegalStateException("Non è possibile prenotare un ritiro se la precedente richiesta di rilascio o rinnovo non è stata chiusa");
-        }
+        List<Slot> listaOrdinata = slotRepo.findByCittadinoOrderByDatetimeDesc(c);
+        Slot last = (listaOrdinata.isEmpty()) ? null : listaOrdinata.get(0);
+        if (!s.getStato().equals(Stato.LIBERO))
+            throw new IllegalStateException("Non è possibile prenotare uno slot non libero");
+        if (tipo.equals(Tipo.RITIRO) && (last == null || last.getTipo().equals(Tipo.RITIRO) || !last.getStato().equals(Stato.CHIUSO)))
+           throw new IllegalStateException("Prima di un ritiro è necessario richiedere un rinnovo/rilascio");
+        if (!tipo.equals(Tipo.RITIRO) && last != null && (!last.getTipo().equals(Tipo.RITIRO) || !last.getStato().equals(Stato.CHIUSO)))
+            throw new IllegalStateException("Non è possibile prenotare due rinnovo/rilascio consecutivi");
+        // mancano controlli vari sul rilascio
         s.setTipo(tipo);
         s.setCittadino(c);
         s.setStato(Stato.OCCUPATO);
