@@ -12,6 +12,7 @@ function App() {
                 <Route exact path='/' element={<Home />} />
                 <Route path='/loginCittadino' element={<Login />} />
                 <Route path='/loginDipendente' element={<Login />} />
+                <Route path='/datiPersonali' element={<AreaRiservata />} />
                 <Route path='/areaCittadino' element={<AreaRiservata />} />
                 <Route path='/areaDipendente' element={<AreaRiservata />} />
                 <Route path='/registrazioneCittadino' element={<Registrazione />} />

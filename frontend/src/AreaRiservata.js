@@ -1,10 +1,12 @@
 import axios from "axios";
 import Modal from 'react-modal';
 import React, {useEffect, useState} from "react";
+import RadioInput from "./RadioInput";
 
 let user;
 let setter;
 let userType;
+let appuntamentiSetter;
 
 function BarraPersonale() {
 	function logout() {
@@ -203,8 +205,91 @@ function AreaDipendente() {
 	);
 }
 
-function AreaCittadino() {
+function Appuntamento({ slot }) {
+	function disdici() {
+		// eslint-disable-next-line no-restricted-globals
+		if (slot.stato === "OCCUPATO" && confirm("Vuoi disdire l'appuntamento?"))
+			axios.put("/gestionePassaporti/slot/" + slot.id, {cittadino: {}, stato: "LIBERO"})
+				.then(response => {
+					getAppuntamenti();
+				})
+				.catch(error => {
+					alert(error.response.data.messaggio);
+				});
+	}
+	return (
+		<div>
+			{slot.datetime}
+			{slot.tipo}
+			{slot.stato}
+			{slot.stato === "OCCUPATO" ? <button onClick={disdici}>Disdici</button> : null}
+		</div>
+	);
+}
+async function getAppuntamenti() {
+	await axios.get("/gestionePassaporti/cittadino/" + user.anagrafica.cf + "/slots")
+		.then(response => {
+			appuntamentiSetter(response.data);
+		})
+		.catch(error => {
+			alert(error.response.data.messaggio);
+			appuntamentiSetter(null);
+		});
+}
+function ListaAppuntamenti() {
+	const [app, setApp] = useState(null);
+	appuntamentiSetter = setApp;
+	useEffect(() => {
+		getAppuntamenti();
+	}, []);
+	return app ? (
+		app.map((e, i) => (
+			<Appuntamento key={i} slot={e} />
+		))
+	) : null;
+}
 
+async function getTipo(set) {
+	await axios.get("/gestionePassaporti/cittadino/" + user.anagrafica.cf + "/slots")
+		.then(response => {
+			if (response.data[response.data.length - 1].tipo === "RITIRO")
+				set("RINNOVO");
+			else
+				set("RITIRO");
+		})
+		.catch(error => {
+			alert(error.response.data.messaggio);
+		});
+}
+function AreaCittadino() {
+	const [tipo, setTipo] = useState(null);
+	const [sede, setSede] = useState(null);
+	function handleChange(event, func) {
+		func(event.target.value);
+	}
+	useEffect(() => {
+		if (!user.passaporto)
+			setTipo("RILASCIO");
+		else
+			getTipo(setTipo);
+	}, []);
+	function getSedi() {
+		return [" f", " f"];
+	}
+	return (
+		<>
+			<h1>I tuoi appuntamenti precedenti</h1>
+			<ListaAppuntamenti />
+			<h1>Notifiche</h1>
+			<h1>Nuovo appuntamento</h1>
+			<div>
+				<p>{tipo}</p>
+				<RadioInput onChange={(e) => handleChange(e, setSede())}
+							name="Sede" required={true}
+							value={sede} options={getSedi()} />
+			</div>
+		</>
+	);
 }
 
 function AreaRiservata() {
