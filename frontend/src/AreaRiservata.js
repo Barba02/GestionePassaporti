@@ -83,6 +83,9 @@ function formatDate(date) {
 }
 function getDatesOfWeek(day) {
 	day.setHours(0, 0, 0, 0);
+	const g = day.getDay();
+	if (g !== 1)
+		day.setDate(day.getDate() - ((g === 0) ? 6 : g - 1));
 	const dates = [];
 	for (let i = 1; i <= 5; i++) {
 		const date = new Date(day);
@@ -122,7 +125,7 @@ function TabellaSlot({ list }) {
 		if (!weekListByTime[key])
 			weekListByTime[key] = new Array(5).fill(null);
 		const index = new Date(item.datetime.slice(0, 10)).getDay() - 1;
-		weekListByTime[key][index] = (item);
+		weekListByTime[key][index] = item;
 	});
 	weekListByTime = sort(weekListByTime);
 	const times = Object.keys(weekListByTime);
