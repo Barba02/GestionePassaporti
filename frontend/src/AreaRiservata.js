@@ -25,8 +25,8 @@ function BarraPersonale() {
 }
 
 function SwitchAzioni({ slot, closer }) {
-	function modificaStato(stato) {
-		axios.put("/gestionePassaporti/slot/" + slot.id, {stato: stato})
+	function modificaStato(stato, tipo=null) {
+		axios.put("/gestionePassaporti/slot/" + slot.id, {stato: stato, tipo:tipo})
 			.then(response => {
 				fetchDataAndSetList();
 				closer();
@@ -40,13 +40,17 @@ function SwitchAzioni({ slot, closer }) {
 		case "NON_GESTITO":
 			return (
 				<div>
-					<button onClick={() => modificaStato("LIBERO")}>Apri slot</button>
+					<button onClick={() => modificaStato("LIBERO", "RITIRO")}>Apri ritiro</button>
+					<span> </span>
+					<button onClick={() => modificaStato("LIBERO", "RILASCIO")}>Apri rilascio</button>
+					<span> </span>
+					<button onClick={() => modificaStato("LIBERO", "RINNOVO")}>Apri rinnovo</button>
 					<span> </span>
 					<button onClick={() => modificaStato("CHIUSO")}>Chiudi slot</button>
 				</div>
 			);
 		case "LIBERO":
-			return <button onClick={() => modificaStato("CHIUSO")}>Chiudi slot</button>
+			return <>Tipo: {slot.tipo}<br/><button onClick={() => modificaStato("CHIUSO")}>Chiudi slot</button></>
 		default:
 			if (slot.cittadino)
 				return <>Tipo: {slot.tipo}<br/>Cittadino: {slot.cittadino.anagrafica.cf}</>
