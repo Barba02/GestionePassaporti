@@ -50,6 +50,8 @@ public class CittadinoService {
         ModificaDTO<Cittadino> mod = new ModificaDTO<>(getCittadino(cf));
         mod.modifica(List.of(new String[]{"figli_minori", "diplomatico", "cie", "passaporto", "scadenza_passaporto"}), c);
         mod.modificaPassword(c.getPassword());
+        if (mod.getObj().getPassaporto().isEmpty())
+            mod.getObj().setPassaporto(null);
         cittadinoRepo.save(mod.getObj());
         return mod;
     }
@@ -76,12 +78,12 @@ public class CittadinoService {
         if (!s.getStato().equals(Stato.LIBERO))
             throw new IllegalStateException("Non è possibile prenotare uno slot non libero");
         if (tipo.equals(Tipo.RITIRO) && (last == null || last.getTipo().equals(Tipo.RITIRO) || !last.getStato().equals(Stato.CHIUSO) || last.getDatetime().isAfter(s.getDatetime().minusDays(30))))
-           throw new IllegalStateException("Prima di un ritiro è necessario richiedere un rinnovo/rilascio");
+           throw new IllegalStateException("Un ritiro è prenotabile se è stato chiuso rilascio/rinnovo almeno 30 giorni della data");
         if (!tipo.equals(Tipo.RITIRO) && last != null && (!last.getTipo().equals(Tipo.RITIRO) || !last.getStato().equals(Stato.CHIUSO)))
             throw new IllegalStateException("Non è possibile prenotare due rinnovo/rilascio consecutivi");
         if (tipo.equals(Tipo.RILASCIO) && c.getPassaporto() != null)
             throw new IllegalStateException("Il cittadino è già in possesso di un passaporto");
-        if (tipo.equals(Tipo.RINNOVO) && c.getScadenza_passaporto().isBefore(s.getDatetime().toLocalDate().minusMonths(6)))
+        if (tipo.equals(Tipo.RINNOVO) && s.getDatetime().toLocalDate().isBefore(c.getScadenza_passaporto().minusMonths(6)))
             throw new IllegalStateException("Non è possibile richiedere rinnovo se mancano più di sei mesi dalla scadenza");
         s.setCittadino(c);
         s.setStato(Stato.OCCUPATO);

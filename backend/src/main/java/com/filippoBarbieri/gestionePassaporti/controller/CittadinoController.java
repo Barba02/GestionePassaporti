@@ -54,9 +54,9 @@ public class CittadinoController extends Controller {
     }
 
     @PutMapping(path = "/{cf}/riserva", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
-    public ResponseEntity<Object> riservaSlot(@PathVariable String cf, @RequestBody Long id) {
+    public ResponseEntity<Object> riservaSlot(@PathVariable String cf, @RequestBody Long[] id) {
         try {
-            Slot s = service.riservaSlot(id, cf);
+            Slot s = service.riservaSlot(id[0], cf);
             s.getCittadino().getPassword().hide();
             return new ResponseEntity<>(s, HttpStatus.OK);
         }
