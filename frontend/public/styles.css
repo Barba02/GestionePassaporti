@@ -117,7 +117,6 @@ label {
 }
 
 div.dateInput, div.radioInput {
-    display: flex;
     width: fit-content;
     margin-right: 32px;
     align-items: center;
@@ -131,7 +130,7 @@ div.dateInput input {
     font-size: 14px;
 }
 
-div.radioInput, div.radioOptions {
+div.radioInput, div.radioOptions, div.dateInput {
     display: flex;
 }
 
@@ -190,14 +189,13 @@ nav p:first-child:hover {
 }
 #root > h2 {
     text-align: center;
-    margin: 0 0 32px;
+    margin: 0;
 }
 
 table {
     display: block;
-    margin: auto;
     width: fit-content;
-    margin-bottom: 32px;
+    margin: 32px auto;
     border-collapse: collapse;
 }
 table th, table td {
@@ -248,7 +246,7 @@ div.legenda div:first-child:before, table td.NON_GESTITO {background-color: dimg
 
 .ReactModal__Content.ReactModal__Content--after-open {
     width: 32%;
-    height: 32%;
+    height: 50%;
     margin: auto;
     display: flex;
     line-height: 1;
@@ -302,7 +300,41 @@ div.appuntamento button:hover {
     background-color: var(--main-hover-color);
 }
 
-div.sedeRadio label > div {
+form.nuovoApp {
+    width: fit-content;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form.nuovoApp p {
+    line-height: 1;
+    margin: 16px 0 0;
+}
+
+form.nuovoApp div.radioInput {flex-direction: row;}
+
+form.nuovoApp > :nth-child(2) {margin: 16px 0;}
+
+form.nuovoApp label > div {
     width: unset;
     padding: 4px 8px;
+    transition: .1s ease-in-out;
+}
+
+form.nuovoApp div.radioOptions div input:checked + label div:after {content: unset;}
+form.nuovoApp div.radioOptions div input:checked + label div {
+    color: white;
+    background-color: var(--main-hover-color);
+}
+
+form.nuovoApp div.radioInput > label {
+    font-weight: bold;
+    margin: 0 10px 0 0;
+}
+
+form.nuovoApp button {
+    width: fit-content;
+    margin: 0 0 32px;
 }
