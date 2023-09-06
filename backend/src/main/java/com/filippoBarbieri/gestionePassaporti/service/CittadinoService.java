@@ -50,8 +50,6 @@ public class CittadinoService {
         ModificaDTO<Cittadino> mod = new ModificaDTO<>(getCittadino(cf));
         mod.modifica(List.of(new String[]{"figli_minori", "diplomatico", "cie", "passaporto", "scadenza_passaporto"}), c);
         mod.modificaPassword(c.getPassword());
-        if (mod.getObj().getPassaporto().isEmpty())
-            mod.getObj().setPassaporto(null);
         cittadinoRepo.save(mod.getObj());
         return mod;
     }
