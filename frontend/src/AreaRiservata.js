@@ -13,7 +13,7 @@ function BarraPersonale() {
 	}
 	return (
 		<nav>
-			<p onClick={() => window.location.href = "/datiPersonali"}>
+			<p onClick={() => window.location.href = "/area" + userType}>
 				{(userType === "Cittadino") ?
 					user.anagrafica.nome + " " + user.anagrafica.cognome + " [" + user.anagrafica.cf + "]" :
 					user.nome + " " + user.cognome + " [" + user.username + "]"}
@@ -22,8 +22,6 @@ function BarraPersonale() {
 		</nav>
 	);
 }
-
-
 
 function AreaRiservata() {
 	user = window.sessionStorage.getItem("user");
@@ -35,7 +33,7 @@ function AreaRiservata() {
 		return (
 			<>
 				<BarraPersonale />
-				{(userType === "Cittadino") ? <AreaCittadino cittadino={user}/> : <AreaDipendente dipendente={user} />}
+				{(userType === "Cittadino") ? <AreaCittadino /> : <AreaDipendente />}
 			</>
 		);
 	}
