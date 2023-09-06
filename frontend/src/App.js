@@ -15,7 +15,6 @@ function App() {
                 <Route path='/areaCittadino' element={<AreaRiservata />} />
                 <Route path='/areaDipendente' element={<AreaRiservata />} />
                 <Route path='/registrazioneCittadino' element={<Registrazione />} />
-                <Route path='/datiPersonali' element={<Home />} />
             </Routes>
         </Router>
     );

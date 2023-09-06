@@ -1,8 +1,8 @@
 import axios from "axios";
 import Input from "./Input";
+import DateInput from "./DateInput";
 import React, {useState} from "react";
 import RadioInput from "./RadioInput";
-import DateInput from "./DateInput";
 
 function Registrazione() {
 	document.getElementsByTagName("body")[0].style.height = "100%";
@@ -52,16 +52,15 @@ function Registrazione() {
 							window.location.href = "/loginCittadino";
 						})
 						.catch(error => {
-							console.log(error);
-							alert(error.response.data.messaggio + "\nContattare assistenza@passaporti.it per eventuali chiarimenti");
+							alert((error.response ? error.response.data.messaggio : error)
+								+ "\nContattare assistenza@passaporti.it per eventuali chiarimenti");
 						});
 				}
 				else
 					alert("Ricontrolla i tuoi dati");
 			})
 			.catch(error => {
-				console.log(error);
-				alert(error.response.data.messaggio);
+				alert(error.response ? error.response.data.messaggio : error);
 			});
 	}
 	function handleChange(event, func) {
