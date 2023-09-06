@@ -32,21 +32,23 @@ public class SlotController extends Controller {
     }
 
     @GetMapping(path = "/sedi", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Object> getMapping() {
-        return new ResponseEntity<>(service.getListaSedi(), HttpStatus.OK);
+    public ResponseEntity<Object> getSedi(@RequestParam(required = false) String tipo,
+                                             @RequestParam(required = false) String stato) {
+        return new ResponseEntity<>(service.getListaSedi(tipo, stato), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{obj}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Object> getMapping(@PathVariable String obj,
                                              @RequestParam(required = false) LocalDateTime from,
                                              @RequestParam(required = false) LocalDateTime to,
-                                             @RequestParam(required = false) String stato) {
+                                             @RequestParam(required = false) String stato,
+                                             @RequestParam(required = false) String tipo) {
 
         try {
             return getSlot(Long.parseLong(obj));
         }
         catch(NumberFormatException e) {
-            return getSlots(obj, stato, from, to);
+            return getSlots(obj, stato, tipo, from, to);
         }
     }
     public ResponseEntity<Object> getSlot(Long id) {
@@ -61,9 +63,9 @@ public class SlotController extends Controller {
                     HttpStatus.NOT_FOUND);
         }
     }
-    public ResponseEntity<Object> getSlots(String sede, String stato, LocalDateTime from, LocalDateTime to) {
+    public ResponseEntity<Object> getSlots(String sede, String stato, String tipo, LocalDateTime from, LocalDateTime to) {
         try {
-            List<Slot> l = service.getSlots(sede, stato, from, to);
+            List<Slot> l = service.getSlots(sede, stato, tipo, from, to);
             l.stream().filter(s -> s.getCittadino() != null).forEach(s -> s.getCittadino().getPassword().hide());
             return new ResponseEntity<>(l, HttpStatus.OK);
         }

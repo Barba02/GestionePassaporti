@@ -1,14 +1,12 @@
 package com.filippoBarbieri.gestionePassaporti.service;
 
 
-import java.util.Map;
-import java.util.List;
-import java.util.Arrays;
+import java.util.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.security.SecureRandom;
 import java.util.stream.Collectors;
-import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
@@ -18,6 +16,7 @@ import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
+import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
 import org.springframework.transaction.annotation.Transactional;
 import com.filippoBarbieri.gestionePassaporti.entity.Dipendente;
 import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
@@ -57,7 +56,7 @@ public class SlotService {
         return s;
     }
 
-    public List<Slot> getSlots(String s, String st, LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
+    public List<Slot> getSlots(String s, String st, String t, LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
         List<Slot> lista;
         try {
             Sede sede = Sede.valueOf(s.toUpperCase());
@@ -86,6 +85,15 @@ public class SlotService {
                 throw new IllegalArgumentException("Stato non valido");
             }
         }
+        if (t != null) {
+            try {
+                Tipo tipo = Tipo.valueOf(t.toUpperCase());
+                lista = lista.stream().filter(el -> tipo.equals(el.getTipo())).collect(Collectors.toList());
+            }
+            catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Tipo non valido");
+            }
+        }
         return lista;
     }
 
@@ -109,8 +117,14 @@ public class SlotService {
         return mod;
     }
 
-    public Sede[] getListaSedi() {
-        return Sede.values();
+    public List<Sede> getListaSedi(String t, String st) {
+        List<Sede> list = new ArrayList<>();
+        for (Sede s : Sede.values())
+            list.addAll(getSlots(s.toString(), st, t, null, null)
+                    .stream()
+                    .map(Slot::getSede)
+                    .toList());
+        return list.stream().distinct().toList();
     }
 
     private static final LocalTime[] slotTimes = {
@@ -162,9 +176,25 @@ public class SlotService {
         Slot fake = new Slot();
         fake.setStato(Stato.CHIUSO);
         for (Sede s : Sede.values()) {
-            List<Slot> slotPassati = slotRepo.findAllBySedeAndDatetimeBefore(s, LocalDateTime.now());
+            List<Slot> slotPassati = slotRepo.findAllBySedeAndDatetimeBefore(s, LocalDateTime.now().minusMinutes(30));
             slotPassati.forEach(slot -> {
                 try {
+                    if (slot.getTipo() == Tipo.RILASCIO) {
+                        Cittadino c = slot.getCittadino();
+                        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                        StringBuilder stringaCasuale = new StringBuilder();
+                        SecureRandom random = new SecureRandom();
+                        for (int i = 0; i < 9; i++)
+                            stringaCasuale.append(chars.charAt(random.nextInt(chars.length())));
+                        c.setPassaporto(String.valueOf(stringaCasuale));
+                        c.setScadenza_passaporto(LocalDate.now().plusYears(10));
+                        cittadinoRepo.save(c);
+                    }
+                    else if (slot.getTipo() == Tipo.RINNOVO) {
+                        Cittadino c = slot.getCittadino();
+                        c.setScadenza_passaporto(c.getScadenza_passaporto().plusYears(10));
+                        cittadinoRepo.save(c);
+                    }
                     modificaSlot(slot.getId(), fake);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
