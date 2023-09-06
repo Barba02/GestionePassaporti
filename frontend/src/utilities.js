@@ -8,18 +8,22 @@ export default class Utilities {
 		});
 		return capitalizedWords.join(" ");
 	}
+
 	static getDay(datetime) {
 		return datetime.slice(0, 10);
 	}
+
 	static getHour(datetime) {
 		return datetime.slice(11).replace('-', ':');
 	}
+
 	static formatDate(date) {
 		const day = String(date.getDate()).padStart(2, '0');
 		const month = String(date.getMonth() + 1).padStart(2, '0'); // Mese è basato su zero, quindi aggiungi 1
 		const year = date.getFullYear();
 		return `${day}/${month}/${year}`;
 	}
+
 	static getDatesOfWeek(day) {
 		day.setHours(0, 0, 0, 0);
 		const g = day.getDay();
@@ -33,6 +37,7 @@ export default class Utilities {
 		}
 		return dates;
 	}
+
 	static sort(dict) {
 		const chiavi = Object.keys(dict);
 		chiavi.sort();
@@ -41,13 +46,14 @@ export default class Utilities {
 			dizionarioOrdinato[chiave] = dict[chiave];
 		return dizionarioOrdinato;
 	}
+
 	static async axiosGetter(url, setter) {
 		await axios.get(url)
 			.then(response => {
 				setter(response.data);
 			})
 			.catch(error => {
-				alert(error.response.data.messaggio ? error.response.data.messaggio : error);
+				alert(error.response ? error.response.data.messaggio : error);
 				setter(null);
 			});
 	}
