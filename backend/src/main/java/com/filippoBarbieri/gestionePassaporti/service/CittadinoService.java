@@ -7,12 +7,14 @@ import org.springframework.dao.DuplicateKeyException;
 import com.filippoBarbieri.gestionePassaporti.enums.Tipo;
 import com.filippoBarbieri.gestionePassaporti.entity.Slot;
 import com.filippoBarbieri.gestionePassaporti.enums.Stato;
+import com.filippoBarbieri.gestionePassaporti.entity.Notifica;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.filippoBarbieri.gestionePassaporti.dto.ModificaDTO;
 import com.filippoBarbieri.gestionePassaporti.entity.Password;
 import com.filippoBarbieri.gestionePassaporti.entity.Cittadino;
 import org.springframework.transaction.annotation.Transactional;
 import com.filippoBarbieri.gestionePassaporti.repository.SlotRepository;
+import com.filippoBarbieri.gestionePassaporti.repository.NotificaRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.CittadinoRepository;
 import com.filippoBarbieri.gestionePassaporti.repository.AnagraficaRepository;
 
@@ -27,6 +29,8 @@ public class CittadinoService {
     private AnagraficaRepository anagraficaRepo;
     @Autowired
     private SlotService slotService;
+    @Autowired
+    private NotificaRepository notificaRepo;
 
     public void registraCittadino(Cittadino c) throws NoSuchElementException, DuplicateKeyException, IllegalArgumentException {
         if (!anagraficaRepo.existsById(c.getAnagrafica().getCf()))
@@ -86,5 +90,9 @@ public class CittadinoService {
         s.setCittadino(c);
         s.setStato(Stato.OCCUPATO);
         return slotService.modificaSlot(id, s).getObj();
+    }
+
+    public List<Notifica> getListaNotifiche(String cf) throws NoSuchElementException {
+        return notificaRepo.findAllByCittadino(getCittadino(cf));
     }
 }

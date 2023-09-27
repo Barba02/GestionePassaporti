@@ -53,6 +53,17 @@ public class CittadinoController extends Controller {
         }
     }
 
+    @GetMapping(path = "/{cf}/notifiche", produces = {"application/json", "application/xml"})
+    public ResponseEntity<Object> getNotifiche(@PathVariable String cf) {
+        try {
+            return new ResponseEntity<>(service.getListaNotifiche(cf), HttpStatus.OK);
+        }
+        catch(NoSuchElementException e) {
+            return new ResponseEntity<>(new ErroreDTO(e.getClass().getSimpleName(), e.getMessage()),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PutMapping(path = "/{cf}/riserva", produces = {"application/json", "application/xml"}, consumes = {"application/json", "application/xml"})
     public ResponseEntity<Object> riservaSlot(@PathVariable String cf, @RequestBody Long[] id) {
         try {

@@ -32,6 +32,9 @@ public class Cittadino {
     @OneToMany
     @JsonIgnore
     private List<Slot> slots;
+    @OneToMany
+    @JsonIgnore
+    private List<Notifica> notifiche;
 
     public String getEmail() {
         return email;

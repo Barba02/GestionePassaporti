@@ -44,6 +44,34 @@ function ListaAppuntamenti() {
 	) : null;
 }
 
+function Notifica({ notifica }) {
+	const [disp, setDisp] = useState(false);
+	useEffect(() => {
+		Utilities.axiosGetter("/gestionePassaporti/notifica/" + notifica.id + "/verifica", setDisp);
+	}, [notifica.id]);
+	return (
+		<div className="appuntamento">
+			<p>{notifica.inizio ? Utilities.formatDate(new Date(Utilities.getDay(notifica.inizio))) : null} -
+				{notifica.fine ? Utilities.formatDate(new Date(Utilities.getDay(notifica.fine))) : null}</p>
+			<p>{Utilities.capitalize(notifica.sede)}</p>
+			<p>{notifica.tipo}</p>
+			<div className={disp.toString()}></div>
+		</div>
+	);
+}
+
+function ListaNotifiche() {
+	const [notifiche, setNotifiche] = useState(null);
+	useEffect(() => {
+		Utilities.axiosGetter("/gestionePassaporti/cittadino/" + user.anagrafica.cf + "/notifiche", setNotifiche);
+	}, []);
+	return notifiche ? (
+		notifiche.map((e, i) => (
+			<Notifica key={i} notifica={e} />
+		))
+	) : null;
+}
+
 function NuovoAppuntamento() {
 	const [tipo, setTipo] = useState(null);
 	const [sede, setSede] = useState(null);
@@ -105,6 +133,7 @@ function AreaCittadino() {
 				<h1>I tuoi appuntamenti precedenti</h1>
 				<ListaAppuntamenti />
 				<h1>Notifiche</h1>
+				<ListaNotifiche />
 				<NuovoAppuntamento />
 			</>
 		) :
